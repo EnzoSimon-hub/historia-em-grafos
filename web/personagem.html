@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>História em Grafos — Henrique VII</title>
+  <meta name="description" content="Ficha completa de Henrique VII: atributos e todas as conexões registradas no acervo.">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/estilo.css">
+</head>
+<body>
+
+  <header>
+    <div>
+      <h1>História em Grafos</h1>
+      <p>Acervo histórico navegável por relações</p>
+    </div>
+    <nav aria-label="Navegação principal">
+      <ul>
+        <li><a href="index.html">Início</a></li>
+        <li><a href="grafo.html">Grafo de Conexões</a></li>
+        <li><a href="personagens.html" aria-current="page">Personagens</a></li>
+        <li><a href="painel.html">Painel do Curador</a></li>
+        <li><a href="login.html">Entrar</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <nav aria-label="Trilha de navegação">
+      <ul class="legenda">
+        <li><a href="index.html">Início</a></li>
+        <li>›</li>
+        <li><a href="personagens.html">Personagens</a></li>
+        <li>›</li>
+        <li><small>Henrique VII</small></li>
+      </ul>
+    </nav>
+
+    <article class="ficha">
+
+      <header class="barra">
+        <div>
+          <span class="etiqueta" data-dinastia="Casa Tudor">Personagem · Casa Tudor</span>
+          <h2>Henrique VII</h2>
+        </div>
+        <div class="acoes" style="margin-top:0">
+          <a class="botao" href="cadastro-personagem.html">Editar</a>
+          <a class="botao" href="cadastro-relacao.html">+ Criar relação</a>
+          <button type="button" class="botao-perigo">Remover</button>
+        </div>
+      </header>
+
+      <section aria-labelledby="titulo-atributos">
+        <h3 id="titulo-atributos">Atributos</h3>
+        <dl class="atributos">
+          <dt>Nome</dt>
+          <dd>Henrique VII</dd>
+
+          <dt>Dinastia</dt>
+          <dd>Casa Tudor</dd>
+
+          <dt>Nascimento</dt>
+          <dd><time datetime="1457">1457</time></dd>
+
+          <dt>Morte</dt>
+          <dd><time datetime="1509">1509</time></dd>
+
+          <dt>Identificador</dt>
+          <dd><small>PER-0001</small></dd>
+        </dl>
+      </section>
+
+      <section aria-labelledby="titulo-conexoes">
+        <h3 id="titulo-conexoes">Conexões</h3>
+        <p><small>Três relações registradas, agrupadas pelo tipo do vínculo.</small></p>
+
+        <section aria-labelledby="grupo-parentesco">
+          <h4 id="grupo-parentesco">Parentesco</h4>
+          <ul class="conexoes">
+            <li>
+              <span class="tipo-relacao">PAI_DE</span>
+              <a href="personagem.html">Henrique VIII</a>
+              <small>Sucessor direto no trono inglês.</small>
+            </li>
+          </ul>
+        </section>
+
+        <section aria-labelledby="grupo-conflito">
+          <h4 id="grupo-conflito">Conflito</h4>
+          <ul class="conexoes">
+            <li>
+              <span class="tipo-relacao">LUTOU_CONTRA</span>
+              <a href="personagem.html">Ricardo III</a>
+              <small>Enfrentamento decidido em Bosworth, encerrando a Guerra das Rosas.</small>
+            </li>
+          </ul>
+        </section>
+
+        <section aria-labelledby="grupo-eventos">
+          <h4 id="grupo-eventos">Participação em eventos</h4>
+          <ul class="conexoes">
+            <li>
+              <span class="tipo-relacao">PARTICIPOU_DA</span>
+              <a href="grafo.html">Batalha de Bosworth</a>
+              <small><time datetime="1485-08-22">22 de agosto de 1485</time></small>
+            </li>
+          </ul>
+        </section>
+      </section>
+
+      <footer>
+        <span class="selo">3 relações</span>
+        <span class="selo">2 eventos</span>
+        <span class="selo">Inglaterra</span>
+      </footer>
+
+    </article>
+
+    <aside style="margin-top:1.5rem">
+      <h3>Como navegar</h3>
+      <p>
+        Cada conexão acima é um caminho: ao abrir a entidade vizinha, você vê as conexões
+        <em>dela</em>. É assim que se percorre o acervo sem precisar cruzar fontes à mão.
+        A mesma vizinhança aparece desenhada no <a href="grafo.html">grafo de conexões</a>.
+      </p>
+    </aside>
+
+  </main>
+
+  <footer>
+    <div>
+      <p>História em Grafos — protótipo estrutural (Etapa 02)</p>
+      <p>Enzo Simon · Tecnologia de Construção de Software 1</p>
+    </div>
+  </footer>
+
+</body>
+</html>

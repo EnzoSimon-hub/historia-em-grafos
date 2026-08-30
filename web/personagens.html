@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>História em Grafos — Personagens</title>
+  <meta name="description" content="Listagem das pessoas históricas registradas no acervo, com busca por nome e filtro por dinastia.">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/estilo.css">
+</head>
+<body>
+
+  <header>
+    <div>
+      <h1>História em Grafos</h1>
+      <p>Acervo histórico navegável por relações</p>
+    </div>
+    <nav aria-label="Navegação principal">
+      <ul>
+        <li><a href="index.html">Início</a></li>
+        <li><a href="grafo.html">Grafo de Conexões</a></li>
+        <li><a href="personagens.html" aria-current="page">Personagens</a></li>
+        <li><a href="painel.html">Painel do Curador</a></li>
+        <li><a href="login.html">Entrar</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <div class="barra">
+      <h2>Personagens</h2>
+      <a class="botao botao-principal" href="cadastro-personagem.html">+ Novo personagem</a>
+    </div>
+
+    <search>
+      <form action="personagens.html" method="get" role="search">
+        <div class="campo">
+          <label for="busca-nome">Buscar por nome</label>
+          <input type="search" id="busca-nome" name="q" placeholder="Ex.: Henrique"
+                 aria-describedby="ajuda-busca">
+          <small class="ajuda" id="ajuda-busca">
+            A busca localiza personagens cujo nome contenha o termo informado.
+          </small>
+        </div>
+
+        <div class="campo">
+          <label for="busca-dinastia">Dinastia</label>
+          <select id="busca-dinastia" name="dinastia">
+            <option value="">Todas</option>
+            <option value="tudor">Casa Tudor</option>
+            <option value="york">Casa York</option>
+            <option value="plantageneta">Casa Plantageneta</option>
+            <option value="stuart">Casa Stuart</option>
+          </select>
+        </div>
+
+        <div class="acoes" style="margin-top:0">
+          <button type="submit">Buscar</button>
+        </div>
+      </form>
+    </search>
+
+    <section aria-labelledby="titulo-resultados">
+      <h3 id="titulo-resultados">6 personagens no acervo</h3>
+
+      <ul class="grade">
+
+        <li>
+          <article>
+            <header>
+              <span class="etiqueta" data-dinastia="Casa Tudor">Casa Tudor</span>
+              <h3><a href="personagem.html">Henrique VII</a></h3>
+            </header>
+            <dl class="atributos">
+              <dt>Nascimento</dt>
+              <dd><time datetime="1457">1457</time></dd>
+              <dt>Morte</dt>
+              <dd><time datetime="1509">1509</time></dd>
+            </dl>
+            <footer>
+              <span class="selo">3 relações</span>
+              <span class="selo">2 eventos</span>
+              <span class="selo">Inglaterra</span>
+            </footer>
+          </article>
+        </li>
+
+        <li>
+          <article>
+            <header>
+              <span class="etiqueta" data-dinastia="Casa Tudor">Casa Tudor</span>
+              <h3><a href="personagem.html">Henrique VIII</a></h3>
+            </header>
+            <dl class="atributos">
+              <dt>Nascimento</dt>
+              <dd><time datetime="1491">1491</time></dd>
+              <dt>Morte</dt>
+              <dd><time datetime="1547">1547</time></dd>
+            </dl>
+            <footer>
+              <span class="selo">5 relações</span>
+              <span class="selo">4 eventos</span>
+              <span class="selo">Inglaterra</span>
+            </footer>
+          </article>
+        </li>
+
+        <li>
+          <article>
+            <header>
+              <span class="etiqueta" data-dinastia="Casa Tudor">Casa Tudor</span>
+              <h3><a href="personagem.html">Elizabeth I</a></h3>
+            </header>
+            <dl class="atributos">
+              <dt>Nascimento</dt>
+              <dd><time datetime="1533">1533</time></dd>
+              <dt>Morte</dt>
+              <dd><time datetime="1603">1603</time></dd>
+            </dl>
+            <footer>
+              <span class="selo">2 relações</span>
+              <span class="selo">5 eventos</span>
+              <span class="selo">Inglaterra</span>
+            </footer>
+          </article>
+        </li>
+
+        <li>
+          <article>
+            <header>
+              <span class="etiqueta" data-dinastia="Casa York">Casa York</span>
+              <h3><a href="personagem.html">Ricardo III</a></h3>
+            </header>
+            <dl class="atributos">
+              <dt>Nascimento</dt>
+              <dd><time datetime="1452">1452</time></dd>
+              <dt>Morte</dt>
+              <dd><time datetime="1485">1485</time></dd>
+            </dl>
+            <footer>
+              <span class="selo">2 relações</span>
+              <span class="selo">1 evento</span>
+              <span class="selo">York</span>
+            </footer>
+          </article>
+        </li>
+
+        <li>
+          <article>
+            <header>
+              <span class="etiqueta" data-dinastia="Casa Plantageneta">Casa Plantageneta</span>
+              <h3><a href="personagem.html">Eduardo IV</a></h3>
+            </header>
+            <dl class="atributos">
+              <dt>Nascimento</dt>
+              <dd><time datetime="1442">1442</time></dd>
+              <dt>Morte</dt>
+              <dd><time datetime="1483">1483</time></dd>
+            </dl>
+            <footer>
+              <span class="selo">4 relações</span>
+              <span class="selo">3 eventos</span>
+            </footer>
+          </article>
+        </li>
+
+        <li>
+          <article>
+            <header>
+              <span class="etiqueta" data-dinastia="Casa Stuart">Casa Stuart</span>
+              <h3><a href="personagem.html">Maria, Rainha dos Escoceses</a></h3>
+            </header>
+            <dl class="atributos">
+              <dt>Nascimento</dt>
+              <dd><time datetime="1542">1542</time></dd>
+              <dt>Morte</dt>
+              <dd><time datetime="1587">1587</time></dd>
+            </dl>
+            <footer>
+              <span class="selo">3 relações</span>
+              <span class="selo">2 eventos</span>
+              <span class="selo">Escócia</span>
+            </footer>
+          </article>
+        </li>
+
+      </ul>
+    </section>
+
+    <nav aria-label="Paginação dos resultados">
+      <ul class="legenda">
+        <li><a href="personagens.html" aria-current="page">1</a></li>
+        <li><a href="personagens.html">2</a></li>
+        <li><a href="personagens.html">Próxima</a></li>
+      </ul>
+    </nav>
+
+  </main>
+
+  <footer>
+    <div>
+      <p>História em Grafos — protótipo estrutural (Etapa 02)</p>
+      <p>Enzo Simon · Tecnologia de Construção de Software 1</p>
+    </div>
+  </footer>
+
+</body>
+</html>

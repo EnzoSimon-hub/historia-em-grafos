@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>História em Grafos — Cadastro de Personagem</title>
+  <meta name="description" content="Formulário de cadastro e edição de personagens do acervo histórico.">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/estilo.css">
+</head>
+<body>
+
+  <header>
+    <div>
+      <h1>História em Grafos</h1>
+      <p>Acervo histórico navegável por relações</p>
+    </div>
+    <nav aria-label="Navegação principal">
+      <ul>
+        <li><a href="index.html">Início</a></li>
+        <li><a href="grafo.html">Grafo de Conexões</a></li>
+        <li><a href="personagens.html">Personagens</a></li>
+        <li><a href="painel.html" aria-current="page">Painel do Curador</a></li>
+        <li><a href="login.html">Entrar</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <nav aria-label="Trilha de navegação">
+      <ul class="legenda">
+        <li><a href="painel.html">Painel do Curador</a></li>
+        <li>›</li>
+        <li><small>Novo personagem</small></li>
+      </ul>
+    </nav>
+
+    <div class="barra">
+      <h2>Novo Personagem</h2>
+    </div>
+
+    <div class="com-lateral">
+
+      <section aria-labelledby="titulo-form">
+        <h3 id="titulo-form" hidden>Dados do personagem</h3>
+
+        <form action="painel.html" method="post">
+
+          <fieldset>
+            <legend>Identificação</legend>
+
+            <div class="campo">
+              <label for="nome">Nome <span class="obrigatorio" aria-hidden="true">*</span></label>
+              <input type="text" id="nome" name="nome" required maxlength="120"
+                     placeholder="Ex.: Henrique VII" aria-describedby="ajuda-nome">
+              <small class="ajuda" id="ajuda-nome">
+                Nome pelo qual o personagem é conhecido historicamente.
+              </small>
+            </div>
+
+            <div class="campo">
+              <label for="dinastia">Dinastia</label>
+              <input type="text" id="dinastia" name="dinastia" list="dinastias"
+                     maxlength="80" placeholder="Ex.: Casa Tudor"
+                     aria-describedby="ajuda-dinastia">
+              <datalist id="dinastias">
+                <option value="Casa Tudor"></option>
+                <option value="Casa York"></option>
+                <option value="Casa Plantageneta"></option>
+                <option value="Casa Stuart"></option>
+              </datalist>
+              <small class="ajuda" id="ajuda-dinastia">
+                Casa, família ou facção de origem. Define a cor do nó no grafo.
+              </small>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Período de vida</legend>
+
+            <div class="dupla">
+              <div class="campo">
+                <label for="ano-nascimento">Ano de nascimento</label>
+                <input type="number" id="ano-nascimento" name="anoNascimento"
+                       min="-3000" max="2100" step="1" placeholder="1457"
+                       aria-describedby="ajuda-anos">
+              </div>
+
+              <div class="campo">
+                <label for="ano-morte">Ano de morte</label>
+                <input type="number" id="ano-morte" name="anoMorte"
+                       min="-3000" max="2100" step="1" placeholder="1509">
+              </div>
+            </div>
+
+            <small class="ajuda" id="ajuda-anos">
+              Use valores negativos para datas anteriores a Cristo. Deixe em branco
+              quando a data for desconhecida.
+            </small>
+          </fieldset>
+
+          <fieldset>
+            <legend>Observações</legend>
+
+            <div class="campo">
+              <label for="notas">Notas do curador</label>
+              <textarea id="notas" name="notas" rows="4" maxlength="800"
+                        placeholder="Contexto, fontes consultadas, pontos em disputa…"
+                        aria-describedby="ajuda-notas"></textarea>
+              <small class="ajuda" id="ajuda-notas">
+                Campo livre, não exibido na consulta pública.
+              </small>
+            </div>
+          </fieldset>
+
+          <div class="acoes">
+            <button type="submit">Salvar personagem</button>
+            <button type="reset">Limpar campos</button>
+            <a class="botao" href="painel.html">Cancelar</a>
+          </div>
+
+          <p style="margin-top:1rem">
+            <small>
+              <span class="obrigatorio" aria-hidden="true">*</span>
+              Campos marcados são obrigatórios.
+            </small>
+          </p>
+
+        </form>
+      </section>
+
+      <aside aria-labelledby="titulo-apoio">
+        <h3 id="titulo-apoio">Depois de salvar</h3>
+        <p>
+          O personagem entra no acervo isolado, sem nenhuma ligação. Ele só aparece
+          conectado no grafo depois que ao menos uma <strong>relação</strong> for criada.
+        </p>
+        <p>
+          <a href="cadastro-relacao.html">Criar uma relação →</a>
+        </p>
+      </aside>
+
+    </div>
+
+  </main>
+
+  <footer>
+    <div>
+      <p>História em Grafos — protótipo estrutural (Etapa 02)</p>
+      <p>Enzo Simon · Tecnologia de Construção de Software 1</p>
+    </div>
+  </footer>
+
+</body>
+</html>

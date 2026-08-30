@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>História em Grafos — Painel do Curador</title>
+  <meta name="description" content="Painel administrativo: contagens do acervo, manutenção de entidades e criação de vínculos.">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/estilo.css">
+</head>
+<body>
+
+  <header>
+    <div>
+      <h1>História em Grafos</h1>
+      <p>Sessão de curador · <strong>enzo.simon</strong></p>
+    </div>
+    <nav aria-label="Navegação principal">
+      <ul>
+        <li><a href="index.html">Início</a></li>
+        <li><a href="grafo.html">Grafo de Conexões</a></li>
+        <li><a href="personagens.html">Personagens</a></li>
+        <li><a href="painel.html" aria-current="page">Painel do Curador</a></li>
+        <li><a href="login.html">Sair</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <div class="barra">
+      <h2>Painel do Curador</h2>
+      <div class="acoes" style="margin-top:0">
+        <a class="botao botao-principal" href="cadastro-personagem.html">+ Nova entidade</a>
+        <a class="botao" href="cadastro-relacao.html">+ Nova relação</a>
+      </div>
+    </div>
+
+    <section aria-labelledby="titulo-indicadores">
+      <h3 id="titulo-indicadores">Acervo em números</h3>
+
+      <ul class="indicadores">
+        <li>
+          <article>
+            <h3>Personagens</h3>
+            <p>6</p>
+          </article>
+        </li>
+        <li>
+          <article>
+            <h3>Eventos</h3>
+            <p>4</p>
+          </article>
+        </li>
+        <li>
+          <article>
+            <h3>Locais</h3>
+            <p>3</p>
+          </article>
+        </li>
+        <li>
+          <article>
+            <h3>Relações</h3>
+            <p>19</p>
+          </article>
+        </li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="titulo-entidades">
+      <div class="barra">
+        <h3 id="titulo-entidades">Entidades cadastradas</h3>
+      </div>
+
+      <div class="rolagem">
+        <table>
+          <caption>
+            Todas as entidades do acervo, com as ações de manutenção disponíveis ao curador.
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Identificador</th>
+              <th scope="col">Tipo</th>
+              <th scope="col">Nome</th>
+              <th scope="col">Detalhe</th>
+              <th scope="col">Relações</th>
+              <th scope="col">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row"><small>PER-0001</small></th>
+              <td>Personagem</td>
+              <td><a href="personagem.html">Henrique VII</a></td>
+              <td>Casa Tudor · 1457 – 1509</td>
+              <td>3</td>
+              <td>
+                <a class="botao" href="cadastro-personagem.html">Editar</a>
+                <button type="button" class="botao-perigo">Remover</button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><small>PER-0002</small></th>
+              <td>Personagem</td>
+              <td><a href="personagem.html">Henrique VIII</a></td>
+              <td>Casa Tudor · 1491 – 1547</td>
+              <td>5</td>
+              <td>
+                <a class="botao" href="cadastro-personagem.html">Editar</a>
+                <button type="button" class="botao-perigo">Remover</button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><small>PER-0004</small></th>
+              <td>Personagem</td>
+              <td><a href="personagem.html">Ricardo III</a></td>
+              <td>Casa York · 1452 – 1485</td>
+              <td>2</td>
+              <td>
+                <a class="botao" href="cadastro-personagem.html">Editar</a>
+                <button type="button" class="botao-perigo">Remover</button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><small>EVE-0001</small></th>
+              <td>Evento</td>
+              <td><a href="grafo.html">Batalha de Bosworth</a></td>
+              <td><time datetime="1485-08-22">22 de agosto de 1485</time></td>
+              <td>4</td>
+              <td>
+                <a class="botao" href="cadastro-personagem.html">Editar</a>
+                <button type="button" class="botao-perigo">Remover</button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><small>LOC-0001</small></th>
+              <td>Local</td>
+              <td><a href="grafo.html">Inglaterra</a></td>
+              <td>Reino · contém York</td>
+              <td>5</td>
+              <td>
+                <a class="botao" href="cadastro-personagem.html">Editar</a>
+                <button type="button" class="botao-perigo">Remover</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="titulo-remocao">
+      <h3 id="titulo-remocao">Confirmação de remoção</h3>
+
+      <div class="com-lateral">
+        <form action="painel.html" method="post">
+          <fieldset>
+            <legend>Remover entidade</legend>
+
+            <div class="campo">
+              <label for="entidade-remover">Entidade</label>
+              <select id="entidade-remover" name="entidade" required
+                      aria-describedby="ajuda-remover">
+                <option value="">— selecione —</option>
+                <option value="PER-0001">Henrique VII</option>
+                <option value="PER-0002">Henrique VIII</option>
+                <option value="PER-0004">Ricardo III</option>
+                <option value="EVE-0001">Batalha de Bosworth</option>
+                <option value="LOC-0001">Inglaterra</option>
+              </select>
+              <small class="ajuda" id="ajuda-remover">
+                Remover uma entidade também desfaz todas as relações ligadas a ela.
+                A operação não pode ser desfeita.
+              </small>
+            </div>
+
+            <div class="campo">
+              <label for="confirmar">
+                <input type="checkbox" id="confirmar" name="confirmar" required
+                       style="width:auto; margin-right:0.5rem">
+                Confirmo que entendi as consequências
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="acoes">
+            <button type="submit" class="botao-perigo">Remover definitivamente</button>
+            <a class="botao" href="painel.html">Cancelar</a>
+          </div>
+        </form>
+
+        <aside aria-labelledby="titulo-aviso">
+          <h3 id="titulo-aviso">Efeito em cascata</h3>
+          <p>
+            Num acervo em rede, apagar um nó não afeta apenas ele: todas as arestas que
+            chegavam nele deixam de existir, e caminhos que passavam por ali se rompem.
+          </p>
+          <p>Por isso a remoção exige confirmação explícita.</p>
+        </aside>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div>
+      <p>História em Grafos — protótipo estrutural (Etapa 02)</p>
+      <p>Enzo Simon · Tecnologia de Construção de Software 1</p>
+    </div>
+  </footer>
+
+</body>
+</html>

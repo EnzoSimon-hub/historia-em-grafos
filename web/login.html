@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>História em Grafos — Entrar</title>
+  <meta name="description" content="Autenticação do curador para as operações de escrita no acervo.">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/estilo.css">
+</head>
+<body>
+
+  <header>
+    <div>
+      <h1>História em Grafos</h1>
+      <p>Acervo histórico navegável por relações</p>
+    </div>
+    <nav aria-label="Navegação principal">
+      <ul>
+        <li><a href="index.html">Início</a></li>
+        <li><a href="grafo.html">Grafo de Conexões</a></li>
+        <li><a href="personagens.html">Personagens</a></li>
+        <li><a href="painel.html">Painel do Curador</a></li>
+        <li><a href="login.html" aria-current="page">Entrar</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <div class="barra">
+      <h2>Entrar como curador</h2>
+    </div>
+
+    <div class="com-lateral">
+
+      <section aria-labelledby="titulo-form">
+        <h3 id="titulo-form" hidden>Credenciais</h3>
+
+        <form action="painel.html" method="post">
+
+          <fieldset>
+            <legend>Credenciais</legend>
+
+            <div class="campo">
+              <label for="usuario">Usuário <span class="obrigatorio" aria-hidden="true">*</span></label>
+              <input type="text" id="usuario" name="usuario" required
+                     autocomplete="username" placeholder="seu.usuario"
+                     aria-describedby="ajuda-usuario">
+              <small class="ajuda" id="ajuda-usuario">
+                Identificação cadastrada para o curador do acervo.
+              </small>
+            </div>
+
+            <div class="campo">
+              <label for="senha">Senha <span class="obrigatorio" aria-hidden="true">*</span></label>
+              <input type="password" id="senha" name="senha" required
+                     autocomplete="current-password" minlength="8"
+                     aria-describedby="ajuda-senha">
+              <small class="ajuda" id="ajuda-senha">
+                Mínimo de 8 caracteres.
+              </small>
+            </div>
+
+            <div class="campo">
+              <label for="manter">
+                <input type="checkbox" id="manter" name="manter"
+                       style="width:auto; margin-right:0.5rem">
+                Manter a sessão neste navegador
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="acoes">
+            <button type="submit">Entrar</button>
+            <a class="botao" href="index.html">Voltar ao acervo</a>
+          </div>
+
+          <p style="margin-top:1rem">
+            <small>
+              <span class="obrigatorio" aria-hidden="true">*</span>
+              Campos obrigatórios. Nesta etapa o formulário não valida credenciais:
+              a autenticação real entra em etapa posterior.
+            </small>
+          </p>
+
+        </form>
+      </section>
+
+      <aside aria-labelledby="titulo-acesso">
+        <h3 id="titulo-acesso">Quem precisa entrar</h3>
+        <p>
+          <strong>Ninguém, para consultar.</strong> O acervo é público: qualquer visitante
+          pode abrir o grafo, percorrer as listagens e ler as fichas sem se identificar.
+        </p>
+        <p>
+          A autenticação existe apenas para as operações de <strong>escrita</strong> —
+          cadastrar, editar, remover e vincular. É o curador que alimenta o acervo.
+        </p>
+      </aside>
+
+    </div>
+
+  </main>
+
+  <footer>
+    <div>
+      <p>História em Grafos — protótipo estrutural (Etapa 02)</p>
+      <p>Enzo Simon · Tecnologia de Construção de Software 1</p>
+    </div>
+  </footer>
+
+</body>
+</html>

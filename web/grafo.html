@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>História em Grafos — Grafo de Conexões</title>
+  <meta name="description" content="Visualização do acervo como rede: nós de personagens, eventos e locais ligados por relações tipadas.">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/estilo.css">
+</head>
+<body>
+
+  <header>
+    <div>
+      <h1>História em Grafos</h1>
+      <p>Acervo histórico navegável por relações</p>
+    </div>
+    <nav aria-label="Navegação principal">
+      <ul>
+        <li><a href="index.html">Início</a></li>
+        <li><a href="grafo.html" aria-current="page">Grafo de Conexões</a></li>
+        <li><a href="personagens.html">Personagens</a></li>
+        <li><a href="painel.html">Painel do Curador</a></li>
+        <li><a href="login.html">Entrar</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <div class="barra">
+      <h2>Grafo de Conexões</h2>
+      <a class="botao" href="cadastro-relacao.html">+ Nova relação</a>
+    </div>
+
+    <div class="com-lateral">
+
+      <section aria-labelledby="titulo-rede">
+        <h3 id="titulo-rede" hidden>Rede de entidades</h3>
+
+        <figure>
+          <svg viewBox="0 0 900 520" role="img" aria-labelledby="svg-titulo svg-desc">
+            <title id="svg-titulo">Rede de conexões do acervo</title>
+            <desc id="svg-desc">
+              Seis personagens, um evento e um local ligados por relações tipadas.
+              Henrique VII é pai de Henrique VIII, que é pai de Elizabeth I e governou
+              a Inglaterra. Henrique VII lutou contra Ricardo III, que se aliou a
+              Eduardo IV e participou da Batalha de Bosworth, ocorrida na Inglaterra.
+              Elizabeth I lutou contra Maria, Rainha dos Escoceses.
+            </desc>
+
+            <defs>
+              <marker id="seta" viewBox="0 0 10 10" refX="9" refY="5"
+                      markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#6b6580"/>
+              </marker>
+            </defs>
+
+            <style>
+              .aresta { stroke: #6b6580; stroke-width: 1.4; marker-end: url(#seta); }
+              .rotulo {
+                font-family: ui-monospace, Consolas, monospace; font-size: 10px;
+                fill: #7a6228; text-anchor: middle;
+                paint-order: stroke; stroke: #08080f; stroke-width: 4px;
+                stroke-linejoin: round;
+              }
+              .no      { fill: #10101a; stroke-width: 1.6; }
+              .nome    { font-family: Inter, sans-serif; font-size: 13px; fill: #d8d0c0; text-anchor: middle; }
+              .miudo   { font-family: Inter, sans-serif; font-size: 10px; fill: #6b6580; text-anchor: middle; }
+            </style>
+
+            <!-- ── Arestas (desenhadas antes dos nós) ── -->
+            <g>
+              <line class="aresta" x1="185" y1="130" x2="265" y2="110"/>
+              <text class="rotulo" x="225" y="112">PAI_DE</text>
+
+              <line class="aresta" x1="415" y1="87" x2="525" y2="83"/>
+              <text class="rotulo" x="470" y="77">PAI_DE</text>
+
+              <line class="aresta" x1="146" y1="172" x2="304" y2="268"/>
+              <text class="rotulo" x="225" y="214">LUTOU_CONTRA</text>
+
+              <line class="aresta" x1="166" y1="358" x2="284" y2="312"/>
+              <text class="rotulo" x="225" y="329">ALIOU_SE_COM</text>
+
+              <line class="aresta" x1="392" y1="312" x2="556" y2="381"/>
+              <text class="rotulo" x="474" y="340">PARTICIPOU_DA</text>
+
+              <line class="aresta" x1="646" y1="102" x2="744" y2="148"/>
+              <text class="rotulo" x="695" y="119">LUTOU_CONTRA</text>
+
+              <line class="aresta" x1="745" y1="324" x2="643" y2="378"/>
+              <text class="rotulo" x="694" y="345">HOUVE_A</text>
+
+              <line class="aresta" x1="387" y1="112" x2="742" y2="278"/>
+              <text class="rotulo" x="564" y="189">GOVERNOU</text>
+            </g>
+
+            <!-- ── Personagens: retângulo, cor da dinastia ── -->
+            <g>
+              <rect class="no" x="35"  y="128" width="150" height="44" rx="3" stroke="#c9a84c"/>
+              <text class="nome" x="110" y="147">Henrique VII</text>
+              <text class="miudo" x="110" y="162">1457 – 1509</text>
+
+              <rect class="no" x="265" y="68"  width="150" height="44" rx="3" stroke="#c9a84c"/>
+              <text class="nome" x="340" y="87">Henrique VIII</text>
+              <text class="miudo" x="340" y="102">1491 – 1547</text>
+
+              <rect class="no" x="525" y="58"  width="150" height="44" rx="3" stroke="#c9a84c"/>
+              <text class="nome" x="600" y="77">Elizabeth I</text>
+              <text class="miudo" x="600" y="92">1533 – 1603</text>
+
+              <rect class="no" x="265" y="268" width="150" height="44" rx="3" stroke="#6a8acc"/>
+              <text class="nome" x="340" y="287">Ricardo III</text>
+              <text class="miudo" x="340" y="302">1452 – 1485</text>
+
+              <rect class="no" x="35"  y="358" width="150" height="44" rx="3" stroke="#8a6acc"/>
+              <text class="nome" x="110" y="377">Eduardo IV</text>
+              <text class="miudo" x="110" y="392">1442 – 1483</text>
+
+              <rect class="no" x="695" y="148" width="190" height="44" rx="3" stroke="#6aaa80"/>
+              <text class="nome" x="790" y="167">Maria, Rainha dos</text>
+              <text class="nome" x="790" y="183">Escoceses</text>
+            </g>
+
+            <!-- ── Evento: círculo laranja ── -->
+            <g>
+              <circle class="no" cx="600" cy="400" r="48" stroke="#cc7a33"/>
+              <text class="nome" x="600" y="394">Batalha de</text>
+              <text class="nome" x="600" y="410">Bosworth</text>
+              <text class="miudo" x="600" y="426">1485</text>
+            </g>
+
+            <!-- ── Local: elipse verde ── -->
+            <g>
+              <ellipse class="no" cx="790" cy="300" rx="72" ry="30" stroke="#4a8a5c"/>
+              <text class="nome" x="790" y="305">Inglaterra</text>
+            </g>
+          </svg>
+
+          <ul class="legenda">
+            <li><span class="amostra" style="background:#c9a84c"></span> Casa Tudor</li>
+            <li><span class="amostra" style="background:#6a8acc"></span> Casa York</li>
+            <li><span class="amostra" style="background:#8a6acc"></span> Casa Plantageneta</li>
+            <li><span class="amostra" style="background:#6aaa80"></span> Casa Stuart</li>
+            <li><span class="amostra" style="background:#cc7a33"></span> Evento</li>
+            <li><span class="amostra" style="background:#4a8a5c"></span> Local</li>
+          </ul>
+
+          <figcaption>
+            Recorte do acervo com oito relações. Personagens são retângulos coloridos pela
+            dinastia, eventos são círculos e locais são elipses. As setas indicam a direção
+            da relação e o rótulo indica o seu tipo. Nesta etapa a rede é uma ilustração
+            estática; a renderização interativa entra em etapa posterior.
+          </figcaption>
+        </figure>
+      </section>
+
+      <aside aria-labelledby="titulo-filtros">
+        <h3 id="titulo-filtros">Filtrar a rede</h3>
+        <p>Restrinja o que aparece no desenho antes de explorar.</p>
+
+        <form action="grafo.html" method="get">
+          <div class="campo">
+            <label for="filtro-tipo">Tipo de entidade</label>
+            <select id="filtro-tipo" name="tipo">
+              <option value="">Todas</option>
+              <option value="personagem">Personagem</option>
+              <option value="evento">Evento</option>
+              <option value="local">Local</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label for="filtro-dinastia">Dinastia</label>
+            <select id="filtro-dinastia" name="dinastia">
+              <option value="">Todas</option>
+              <option value="tudor">Casa Tudor</option>
+              <option value="york">Casa York</option>
+              <option value="plantageneta">Casa Plantageneta</option>
+              <option value="stuart">Casa Stuart</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label for="filtro-relacao">Tipo de relação</label>
+            <select id="filtro-relacao" name="relacao">
+              <option value="">Todas</option>
+              <option value="PAI_DE">PAI_DE</option>
+              <option value="LUTOU_CONTRA">LUTOU_CONTRA</option>
+              <option value="ALIOU_SE_COM">ALIOU_SE_COM</option>
+              <option value="GOVERNOU">GOVERNOU</option>
+              <option value="PARTICIPOU_DA">PARTICIPOU_DA</option>
+              <option value="HOUVE_A">HOUVE_A</option>
+            </select>
+          </div>
+
+          <div class="acoes">
+            <button type="submit">Aplicar</button>
+            <button type="reset">Limpar</button>
+          </div>
+        </form>
+      </aside>
+
+    </div>
+
+  </main>
+
+  <footer>
+    <div>
+      <p>História em Grafos — protótipo estrutural (Etapa 02)</p>
+      <p>Enzo Simon · Tecnologia de Construção de Software 1</p>
+    </div>
+  </footer>
+
+</body>
+</html>

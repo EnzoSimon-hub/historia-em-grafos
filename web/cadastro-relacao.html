@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>História em Grafos — Nova Relação</title>
+  <meta name="description" content="Formulário de criação de relação tipada e direcionada entre duas entidades do acervo.">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/estilo.css">
+</head>
+<body>
+
+  <header>
+    <div>
+      <h1>História em Grafos</h1>
+      <p>Acervo histórico navegável por relações</p>
+    </div>
+    <nav aria-label="Navegação principal">
+      <ul>
+        <li><a href="index.html">Início</a></li>
+        <li><a href="grafo.html">Grafo de Conexões</a></li>
+        <li><a href="personagens.html">Personagens</a></li>
+        <li><a href="painel.html" aria-current="page">Painel do Curador</a></li>
+        <li><a href="login.html">Entrar</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <nav aria-label="Trilha de navegação">
+      <ul class="legenda">
+        <li><a href="painel.html">Painel do Curador</a></li>
+        <li>›</li>
+        <li><small>Nova relação</small></li>
+      </ul>
+    </nav>
+
+    <div class="barra">
+      <h2>Nova Relação</h2>
+    </div>
+
+    <div class="com-lateral">
+
+      <section aria-labelledby="titulo-form">
+        <h3 id="titulo-form" hidden>Dados da relação</h3>
+
+        <form action="grafo.html" method="post">
+
+          <fieldset>
+            <legend>Origem</legend>
+
+            <div class="campo">
+              <label for="origem">Entidade de origem <span class="obrigatorio" aria-hidden="true">*</span></label>
+              <select id="origem" name="origem" required aria-describedby="ajuda-origem">
+                <option value="">— selecione —</option>
+                <optgroup label="Personagens">
+                  <option value="PER-0001">Henrique VII</option>
+                  <option value="PER-0002">Henrique VIII</option>
+                  <option value="PER-0003">Elizabeth I</option>
+                  <option value="PER-0004">Ricardo III</option>
+                  <option value="PER-0005">Eduardo IV</option>
+                  <option value="PER-0006">Maria, Rainha dos Escoceses</option>
+                </optgroup>
+                <optgroup label="Eventos">
+                  <option value="EVE-0001">Batalha de Bosworth</option>
+                </optgroup>
+                <optgroup label="Locais">
+                  <option value="LOC-0001">Inglaterra</option>
+                  <option value="LOC-0002">York</option>
+                  <option value="LOC-0003">Escócia</option>
+                </optgroup>
+              </select>
+              <small class="ajuda" id="ajuda-origem">
+                Ponta de onde a relação parte. A relação é direcionada: inverter a
+                origem e o destino muda o seu significado.
+              </small>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Vínculo</legend>
+
+            <div class="campo">
+              <label for="tipo">Tipo de relação <span class="obrigatorio" aria-hidden="true">*</span></label>
+              <select id="tipo" name="tipo" required aria-describedby="ajuda-tipo">
+                <option value="">— selecione —</option>
+                <optgroup label="Personagem → Personagem">
+                  <option value="PAI_DE">PAI_DE</option>
+                  <option value="LUTOU_CONTRA">LUTOU_CONTRA</option>
+                  <option value="ALIOU_SE_COM">ALIOU_SE_COM</option>
+                  <option value="GOVERNOU">GOVERNOU</option>
+                </optgroup>
+                <optgroup label="Evento → Evento">
+                  <option value="CAUSOU">CAUSOU</option>
+                  <option value="PRECEDEU">PRECEDEU</option>
+                  <option value="INSPIROU">INSPIROU</option>
+                  <option value="REVERTEU">REVERTEU</option>
+                </optgroup>
+                <optgroup label="Personagem → Local">
+                  <option value="NASCEU_EM">NASCEU_EM</option>
+                  <option value="MORREU_EM">MORREU_EM</option>
+                  <option value="VIVEU_EM">VIVEU_EM</option>
+                </optgroup>
+                <optgroup label="Outras ligações">
+                  <option value="PARTICIPOU_DA">PARTICIPOU_DA (Personagem → Evento)</option>
+                  <option value="HOUVE_A">HOUVE_A (Local → Evento)</option>
+                  <option value="CONTEM">CONTEM (Local → Local)</option>
+                </optgroup>
+              </select>
+              <small class="ajuda" id="ajuda-tipo">
+                Escolhido a partir do catálogo controlado definido na proposta.
+                O catálogo é extensível sem alterar a estrutura do banco.
+              </small>
+            </div>
+
+            <div class="campo">
+              <label for="descricao">Descrição do vínculo</label>
+              <textarea id="descricao" name="descricao" rows="3" maxlength="400"
+                        placeholder="Ex.: aliança selada após o cerco de 1187"
+                        aria-describedby="ajuda-descricao"></textarea>
+              <small class="ajuda" id="ajuda-descricao">
+                Detalhamento livre desta ligação específica. É o que diferencia duas
+                relações do mesmo tipo.
+              </small>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Destino</legend>
+
+            <div class="campo">
+              <label for="destino">Entidade de destino <span class="obrigatorio" aria-hidden="true">*</span></label>
+              <select id="destino" name="destino" required aria-describedby="ajuda-destino">
+                <option value="">— selecione —</option>
+                <optgroup label="Personagens">
+                  <option value="PER-0001">Henrique VII</option>
+                  <option value="PER-0002">Henrique VIII</option>
+                  <option value="PER-0003">Elizabeth I</option>
+                  <option value="PER-0004">Ricardo III</option>
+                  <option value="PER-0005">Eduardo IV</option>
+                  <option value="PER-0006">Maria, Rainha dos Escoceses</option>
+                </optgroup>
+                <optgroup label="Eventos">
+                  <option value="EVE-0001">Batalha de Bosworth</option>
+                </optgroup>
+                <optgroup label="Locais">
+                  <option value="LOC-0001">Inglaterra</option>
+                  <option value="LOC-0002">York</option>
+                  <option value="LOC-0003">Escócia</option>
+                </optgroup>
+              </select>
+              <small class="ajuda" id="ajuda-destino">
+                Ponta para onde a relação aponta.
+              </small>
+            </div>
+          </fieldset>
+
+          <div class="acoes">
+            <button type="submit">Criar relação</button>
+            <button type="reset">Limpar campos</button>
+            <a class="botao" href="painel.html">Cancelar</a>
+          </div>
+
+          <p style="margin-top:1rem">
+            <small>
+              <span class="obrigatorio" aria-hidden="true">*</span>
+              Campos marcados são obrigatórios.
+            </small>
+          </p>
+
+        </form>
+      </section>
+
+      <aside aria-labelledby="titulo-apoio">
+        <h3 id="titulo-apoio">Por que a relação tem tela própria</h3>
+        <p>
+          Num cadastro comum, a ligação entre dois registros é apenas uma chave
+          estrangeira. Aqui ela é o objeto principal: tem <strong>tipo</strong>,
+          <strong>direção</strong> e <strong>descrição</strong> próprios.
+        </p>
+        <p>
+          É essa escolha que permite perguntar “quem lutou contra quem” em vez de
+          apenas “quem está ligado a quem”.
+        </p>
+      </aside>
+
+    </div>
+
+  </main>
+
+  <footer>
+    <div>
+      <p>História em Grafos — protótipo estrutural (Etapa 02)</p>
+      <p>Enzo Simon · Tecnologia de Construção de Software 1</p>
+    </div>
+  </footer>
+
+</body>
+</html>

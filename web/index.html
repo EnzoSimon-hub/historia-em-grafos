@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>História em Grafos — Início</title>
+  <meta name="description" content="Acervo histórico navegável: personagens, eventos e locais ligados por relações tipadas.">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/estilo.css">
+</head>
+<body>
+
+  <header>
+    <div>
+      <h1>História em Grafos</h1>
+      <p>Acervo histórico navegável por relações</p>
+    </div>
+    <nav aria-label="Navegação principal">
+      <ul>
+        <li><a href="index.html" aria-current="page">Início</a></li>
+        <li><a href="grafo.html">Grafo de Conexões</a></li>
+        <li><a href="personagens.html">Personagens</a></li>
+        <li><a href="painel.html">Painel do Curador</a></li>
+        <li><a href="login.html">Entrar</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <section class="destaque" aria-labelledby="titulo-apresentacao">
+      <h2 id="titulo-apresentacao">O acervo como uma rede, não como uma lista</h2>
+      <p>
+        A História é ensinada de forma linear — linhas do tempo, textos corridos, tabelas.
+        Esse formato esconde justamente o que lhe dá sentido: a <mark>teia de relações</mark>
+        entre pessoas, acontecimentos e lugares.
+      </p>
+      <p>
+        <strong>História em Grafos</strong> registra não apenas os fatos, mas as ligações
+        entre eles. Perguntas como <em>“quais eventos foram causados por esta batalha?”</em>
+        ou <em>“quem são os descendentes deste governante?”</em> deixam de exigir cruzamento
+        manual de fontes e passam a ser respondidas por navegação visual.
+      </p>
+    </section>
+
+    <section aria-labelledby="titulo-inicio">
+      <div class="barra">
+        <h2 id="titulo-inicio">Por onde começar</h2>
+        <a class="botao botao-principal" href="grafo.html">Abrir o grafo</a>
+      </div>
+
+      <ul class="grade">
+        <li>
+          <article>
+            <header>
+              <span class="etiqueta">Consulta pública</span>
+              <h3><a href="grafo.html">Grafo de Conexões</a></h3>
+            </header>
+            <p>
+              Veja o acervo inteiro como uma rede navegável. Os nós são personagens,
+              eventos e locais; as arestas são as relações entre eles.
+            </p>
+          </article>
+        </li>
+        <li>
+          <article>
+            <header>
+              <span class="etiqueta">Consulta pública</span>
+              <h3><a href="personagens.html">Listagem de Personagens</a></h3>
+            </header>
+            <p>
+              Percorra as pessoas históricas registradas, filtre por nome ou dinastia
+              e abra a ficha completa de cada uma.
+            </p>
+          </article>
+        </li>
+        <li>
+          <article>
+            <header>
+              <span class="etiqueta">Acesso restrito</span>
+              <h3><a href="painel.html">Painel do Curador</a></h3>
+            </header>
+            <p>
+              Cadastre entidades, edite registros existentes e crie os vínculos que
+              sustentam o grafo. Exige autenticação.
+            </p>
+          </article>
+        </li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="titulo-dominio">
+      <div class="barra">
+        <h2 id="titulo-dominio">O que o acervo registra</h2>
+      </div>
+
+      <ul class="grade">
+        <li>
+          <article>
+            <header>
+              <span class="etiqueta">Entidade</span>
+              <h3>Personagem</h3>
+            </header>
+            <p>Pessoa histórica, com dinastia de origem e anos de nascimento e morte.</p>
+            <footer>
+              <span class="selo">nome</span>
+              <span class="selo">dinastia</span>
+              <span class="selo">nascimento</span>
+              <span class="selo">morte</span>
+            </footer>
+          </article>
+        </li>
+        <li>
+          <article>
+            <header>
+              <span class="etiqueta">Entidade</span>
+              <h3>Evento</h3>
+            </header>
+            <p>Acontecimento relevante, com data em formato livre para acomodar imprecisão.</p>
+            <footer>
+              <span class="selo">nome</span>
+              <span class="selo">data</span>
+              <span class="selo">descrição</span>
+            </footer>
+          </article>
+        </li>
+        <li>
+          <article>
+            <header>
+              <span class="etiqueta">Entidade</span>
+              <h3>Local</h3>
+            </header>
+            <p>Lugar geográfico ou político. Locais são hierárquicos: um contém outros.</p>
+            <footer>
+              <span class="selo">nome</span>
+              <span class="selo">descrição</span>
+              <span class="selo">hierarquia</span>
+            </footer>
+          </article>
+        </li>
+        <li>
+          <article>
+            <header>
+              <span class="etiqueta">Conceito central</span>
+              <h3>Relação</h3>
+            </header>
+            <p>
+              O vínculo entre duas entidades, tratado como objeto próprio: tem direção,
+              tipo e descrição. É o que distingue este acervo de um cadastro comum.
+            </p>
+            <footer>
+              <span class="selo">tipo</span>
+              <span class="selo">origem</span>
+              <span class="selo">destino</span>
+              <span class="selo">descrição</span>
+            </footer>
+          </article>
+        </li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer>
+    <div>
+      <p>História em Grafos — protótipo estrutural (Etapa 02)</p>
+      <p>Enzo Simon · Tecnologia de Construção de Software 1</p>
+    </div>
+  </footer>
+
+</body>
+</html>

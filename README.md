@@ -30,6 +30,18 @@ Permitir que um **curador** cadastre entidades históricas e as relações entre
 
 ---
 
+## Como abrir o protótipo
+
+Não é necessário instalar nada nem executar servidor:
+
+1. Baixe ou clone o repositório.
+2. Abra **`web/index.html`** no navegador — duplo clique já basta.
+3. Navegue pelo menu superior.
+
+O protótipo desta etapa é composto apenas por HTML e CSS, sem JavaScript.
+
+---
+
 ## Stack pretendida
 
 | Camada | Tecnologia |
@@ -48,7 +60,8 @@ As tecnologias podem ser ajustadas ao longo do semestre, mantida a coerência da
 
 | Documento | Conteúdo |
 |---|---|
-| [`docs/proposta.md`](docs/proposta.md) | **Proposta e especificação completa do projeto** — os 12 itens exigidos na Etapa 01: problema, público-alvo, objetivo, funcionalidades, entidades do domínio, telas, operações, tecnologias, persistência e diagramas da solução. |
+| [`docs/proposta.md`](docs/proposta.md) | **Etapa 01 — Proposta e especificação do projeto.** Os 12 itens exigidos: problema, público-alvo, objetivo, funcionalidades, entidades do domínio, telas, operações, tecnologias, persistência e diagramas da solução. |
+| [`docs/etapa-02.md`](docs/etapa-02.md) | **Etapa 02 — Protótipo estrutural com HTML semântico.** Funcionalidades implementadas, páginas criadas e decisões relacionadas à estrutura HTML. |
 
 ---
 
@@ -56,9 +69,22 @@ As tecnologias podem ser ajustadas ao longo do semestre, mantida a coerência da
 
 ```
 historia-em-grafos/
-├── README.md          → este arquivo
-└── docs/
-    └── proposta.md    → proposta e especificação do projeto (Etapa 01)
+├── README.md                          → este arquivo
+├── docs/
+│   ├── proposta.md                    → proposta do projeto (Etapa 01)
+│   └── etapa-02.md                    → documentação do protótipo (Etapa 02)
+└── web/                               → protótipo estrutural (Etapa 02)
+    ├── index.html                     → página inicial
+    ├── grafo.html                     → grafo de conexões
+    ├── personagens.html               → listagem
+    ├── personagem.html                → detalhes
+    ├── cadastro-personagem.html       → formulário de cadastro
+    ├── cadastro-relacao.html          → formulário de vínculo
+    ├── painel.html                    → painel administrativo
+    ├── login.html                     → autenticação
+    └── assets/
+        └── css/
+            └── estilo.css             → folha de estilo única, compartilhada
 ```
 
 ---
@@ -68,11 +94,16 @@ historia-em-grafos/
 | Etapa | Descrição | Tag | Status |
 |---|---|---|---|
 | **01** | Proposta e especificação do projeto | `etapa-01` | ✅ Entregue |
-| 02 | — | — | ⏳ A definir |
+| **02** | Protótipo estrutural com HTML semântico | `etapa-02` | ✅ Entregue |
 | 03 | — | — | ⏳ A definir |
 
 ---
 
 ## Status do projeto
 
-O repositório encontra-se na **fase de especificação**. Esta etapa entrega a definição do problema e a especificação funcional inicial da aplicação; o código-fonte do cliente e do servidor será incorporado nas etapas seguintes da disciplina, conforme o desenvolvimento incremental previsto no plano de ensino.
+O repositório encontra-se na **fase de prototipação da interface**. A Etapa 01 entregou a
+definição do problema e a especificação funcional; a Etapa 02 entrega a primeira interface
+Web, construída com HTML semântico e sem comportamento dinâmico.
+
+O código do cliente e do servidor descritos na *Stack pretendida* será incorporado nas etapas
+seguintes, conforme o desenvolvimento incremental previsto no plano de ensino.

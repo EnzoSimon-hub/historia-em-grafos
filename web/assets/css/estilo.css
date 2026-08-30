@@ -1,0 +1,573 @@
+/* ==========================================================================
+   História em Grafos — folha de estilo do protótipo estrutural (Etapa 02)
+   --------------------------------------------------------------------------
+   Organizada na mesma ordem em que os elementos aparecem no documento:
+   1. Variáveis  2. Reset  3. Tipografia  4. Cabeçalho e navegação
+   5. Conteúdo principal  6. Artigos e listagens  7. Tabelas
+   8. Formulários  9. Botões  10. Rodapé  11. Responsividade
+   ========================================================================== */
+
+/* ── 1. Variáveis de tema ────────────────────────────────────────────────── */
+
+:root {
+  --bg:          #08080f;
+  --surface:     #10101a;
+  --surface-alt: #16162a;
+  --border:      #2a2a45;
+  --gold:        #c9a84c;
+  --gold-dim:    #7a6228;
+  --text:        #d8d0c0;
+  --text-dim:    #6b6580;
+  --danger:      #8b2020;
+  --success:     #1a5c3a;
+
+  --tudor:         #c9a84c;
+  --york:          #6a8acc;
+  --plantageneta:  #8a6acc;
+  --stuart:        #6aaa80;
+
+  --fonte-titulo: 'Cinzel', Georgia, 'Times New Roman', serif;
+  --fonte-texto:  'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --raio: 4px;
+  --largura-max: 1180px;
+}
+
+/* ── 2. Reset ────────────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--fonte-texto);
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+img,
+svg { max-width: 100%; }
+
+/* ── 3. Tipografia ───────────────────────────────────────────────────────── */
+
+h1, h2, h3, h4 {
+  font-family: var(--fonte-titulo);
+  font-weight: 600;
+  color: var(--gold);
+  line-height: 1.25;
+}
+
+h1 { font-size: 1.5rem; letter-spacing: 0.06em; }
+h2 { font-size: 1.35rem; margin-bottom: 0.6rem; }
+h3 { font-size: 1.1rem; }
+h4 { font-size: 0.95rem; color: var(--text); }
+
+p { margin-bottom: 0.9rem; }
+
+a {
+  color: var(--gold);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+a:hover,
+a:focus-visible { border-bottom-color: var(--gold); }
+
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+small { color: var(--text-dim); font-size: 0.82rem; }
+
+mark {
+  background: transparent;
+  color: var(--gold);
+  font-weight: 500;
+}
+
+/* ── 4. Cabeçalho e navegação ────────────────────────────────────────────── */
+
+body > header {
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, #0d0d1a 0%, var(--bg) 100%);
+  padding: 1rem 1.5rem 0;
+}
+
+body > header > div {
+  max-width: var(--largura-max);
+  margin: 0 auto;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+body > header p { color: var(--text-dim); font-size: 0.85rem; margin: 0; }
+
+nav {
+  max-width: var(--largura-max);
+  margin: 0.9rem auto 0;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+nav a {
+  display: block;
+  padding: 0.55rem 0.95rem;
+  color: var(--text-dim);
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: var(--raio) var(--raio) 0 0;
+  font-size: 0.88rem;
+  letter-spacing: 0.02em;
+}
+
+nav a:hover { color: var(--text); background: var(--surface); }
+
+nav a[aria-current="page"] {
+  color: var(--gold);
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+/* ── 5. Conteúdo principal ───────────────────────────────────────────────── */
+
+main {
+  flex: 1;
+  width: 100%;
+  max-width: var(--largura-max);
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
+}
+
+main > section { margin-bottom: 2.5rem; }
+
+/* Cabeçalho interno de seção: título à esquerda, ação à direita. */
+.barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-bottom: 0.7rem;
+  margin-bottom: 1.2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.barra h2 { margin-bottom: 0; }
+
+/* Faixa de apresentação da página inicial. */
+.destaque {
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gold);
+  background: var(--surface);
+  border-radius: var(--raio);
+  padding: 1.8rem;
+}
+
+.destaque p:last-child { margin-bottom: 0; }
+
+/* Grade genérica de cartões. */
+.grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
+  gap: 1rem;
+  list-style: none;
+}
+
+/* Cartões de contagem do painel. */
+.indicadores {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  list-style: none;
+}
+
+.indicadores article {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--raio);
+  padding: 1.1rem 1.2rem;
+}
+
+.indicadores h3 {
+  font-family: var(--fonte-texto);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 0.35rem;
+}
+
+.indicadores p {
+  font-family: var(--fonte-titulo);
+  font-size: 2rem;
+  color: var(--gold);
+  margin: 0;
+  line-height: 1;
+}
+
+/* ── 6. Artigos e listagens ──────────────────────────────────────────────── */
+
+.grade > li > article,
+article.ficha {
+  height: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--raio);
+  padding: 1.1rem 1.2rem;
+  transition: border-color 0.15s;
+}
+
+.grade > li > article:hover { border-color: var(--gold-dim); }
+
+article header { margin-bottom: 0.7rem; }
+
+article h3 { margin-bottom: 0.15rem; }
+
+/* Etiqueta de dinastia / tipo, acima do nome. */
+.etiqueta {
+  display: inline-block;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.etiqueta[data-dinastia="Casa Tudor"]        { color: var(--tudor); }
+.etiqueta[data-dinastia="Casa York"]         { color: var(--york); }
+.etiqueta[data-dinastia="Casa Plantageneta"] { color: var(--plantageneta); }
+.etiqueta[data-dinastia="Casa Stuart"]       { color: var(--stuart); }
+
+/* Lista de atributos nome/valor. */
+dl.atributos {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.35rem 1.2rem;
+  margin-bottom: 1rem;
+}
+
+dl.atributos dt {
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+dl.atributos dd { color: var(--text); }
+
+/* Selos no rodapé dos cartões. */
+article footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.9rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--border);
+}
+
+.selo {
+  font-size: 0.72rem;
+  padding: 0.16rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--text-dim);
+  background: var(--surface-alt);
+}
+
+/* Lista de conexões da tela de detalhe. */
+.conexoes { list-style: none; }
+
+.conexoes > li {
+  border-bottom: 1px solid var(--border);
+  padding: 0.7rem 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.conexoes > li:last-child { border-bottom: none; }
+
+.tipo-relacao {
+  font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+  color: var(--gold-dim);
+  border: 1px solid var(--gold-dim);
+  border-radius: 2px;
+  padding: 0.1rem 0.45rem;
+  white-space: nowrap;
+}
+
+/* ── 7. Tabelas ──────────────────────────────────────────────────────────── */
+
+.rolagem { overflow-x: auto; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+caption {
+  text-align: left;
+  color: var(--text-dim);
+  font-size: 0.82rem;
+  padding-bottom: 0.6rem;
+}
+
+th, td {
+  text-align: left;
+  padding: 0.65rem 0.8rem;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+thead th {
+  font-family: var(--fonte-texto);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-weight: 500;
+  background: var(--surface);
+}
+
+tbody tr:hover { background: var(--surface); }
+
+/* ── 8. Formulários ──────────────────────────────────────────────────────── */
+
+form { max-width: 620px; }
+
+fieldset {
+  border: 1px solid var(--border);
+  border-radius: var(--raio);
+  padding: 1.3rem 1.4rem 1.5rem;
+  margin-bottom: 1.4rem;
+  background: var(--surface);
+}
+
+legend {
+  font-family: var(--fonte-titulo);
+  font-size: 0.95rem;
+  color: var(--gold);
+  padding: 0 0.6rem;
+  letter-spacing: 0.04em;
+}
+
+.campo { margin-bottom: 1.1rem; }
+
+.campo:last-child { margin-bottom: 0; }
+
+label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--raio);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 0.6rem 0.75rem;
+}
+
+textarea { resize: vertical; min-height: 90px; }
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--gold);
+  outline: none;
+}
+
+input:invalid:not(:placeholder-shown) { border-color: var(--danger); }
+
+/* Texto de apoio ligado ao campo por aria-describedby. */
+.ajuda {
+  display: block;
+  margin-top: 0.3rem;
+  color: var(--text-dim);
+  font-size: 0.78rem;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* Marca de campo obrigatório, ao lado do rótulo. */
+label .obrigatorio { color: var(--gold); }
+
+/* Par de campos lado a lado (ano de nascimento / ano de morte). */
+.dupla {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* Linha de busca. */
+search form {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-end;
+  max-width: 100%;
+  margin-bottom: 1.4rem;
+}
+
+search .campo { flex: 1; margin-bottom: 0; }
+
+/* ── 9. Botões ───────────────────────────────────────────────────────────── */
+
+.acoes {
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  margin-top: 1.4rem;
+}
+
+button,
+.botao {
+  font-family: var(--fonte-texto);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  padding: 0.6rem 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: var(--raio);
+  background: var(--surface-alt);
+  color: var(--text);
+  cursor: pointer;
+  display: inline-block;
+}
+
+button:hover,
+.botao:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+button[type="submit"],
+.botao-principal {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #14120a;
+  font-weight: 500;
+}
+
+button[type="submit"]:hover,
+.botao-principal:hover {
+  background: var(--gold-dim);
+  border-color: var(--gold-dim);
+  color: var(--text);
+}
+
+.botao-perigo { border-color: var(--danger); color: #c88; }
+
+.botao-perigo:hover { background: var(--danger); color: var(--text); border-color: var(--danger); }
+
+/* ── 10. Figura do grafo, legenda e rodapé ───────────────────────────────── */
+
+figure {
+  border: 1px solid var(--border);
+  border-radius: var(--raio);
+  background: var(--surface);
+  padding: 1.2rem;
+}
+
+figcaption {
+  color: var(--text-dim);
+  font-size: 0.82rem;
+  margin-top: 0.8rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--border);
+}
+
+.legenda {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.3rem;
+  margin-top: 1rem;
+  font-size: 0.82rem;
+}
+
+.legenda li { display: flex; align-items: center; gap: 0.45rem; }
+
+.amostra {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+aside {
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gold-dim);
+  border-radius: var(--raio);
+  background: var(--surface);
+  padding: 1.1rem 1.2rem;
+  font-size: 0.88rem;
+}
+
+aside h3 { margin-bottom: 0.5rem; }
+
+aside p:last-child { margin-bottom: 0; }
+
+/* Duas colunas: conteúdo + apoio lateral. */
+.com-lateral {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+body > footer {
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  padding: 1.5rem;
+  color: var(--text-dim);
+  font-size: 0.83rem;
+}
+
+body > footer > div {
+  max-width: var(--largura-max);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+body > footer p { margin: 0; }
+
+/* ── 11. Responsividade ──────────────────────────────────────────────────── */
+
+@media (max-width: 820px) {
+  .com-lateral { grid-template-columns: 1fr; }
+  .dupla { grid-template-columns: 1fr; }
+  search form { flex-direction: column; align-items: stretch; }
+}
+
+@media (max-width: 520px) {
+  main { padding: 1.5rem 1rem 2.5rem; }
+  body > header { padding: 1rem 1rem 0; }
+  nav ul { gap: 0; }
+  nav a { padding: 0.5rem 0.7rem; font-size: 0.82rem; }
+}
