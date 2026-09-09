@@ -62,6 +62,7 @@ As tecnologias podem ser ajustadas ao longo do semestre, mantida a coerência da
 |---|---|
 | [`docs/proposta.md`](docs/proposta.md) | **Etapa 01 — Proposta e especificação do projeto.** Os 12 itens exigidos: problema, público-alvo, objetivo, funcionalidades, entidades do domínio, telas, operações, tecnologias, persistência e diagramas da solução. |
 | [`docs/etapa-02.md`](docs/etapa-02.md) | **Etapa 02 — Protótipo estrutural com HTML semântico.** Funcionalidades implementadas, páginas criadas e decisões relacionadas à estrutura HTML. |
+| [`docs/etapa-03.md`](docs/etapa-03.md) | **Etapa 03 — Interface responsiva com CSS.** Breakpoints, uso de Flexbox e Grid, escala de espaçamentos, decisões de responsividade e as 9 evidências em três viewports. |
 
 ---
 
@@ -72,8 +73,11 @@ historia-em-grafos/
 ├── README.md                          → este arquivo
 ├── docs/
 │   ├── proposta.md                    → proposta do projeto (Etapa 01)
-│   └── etapa-02.md                    → documentação do protótipo (Etapa 02)
-└── web/                               → protótipo estrutural (Etapa 02)
+│   ├── etapa-02.md                    → documentação do protótipo (Etapa 02)
+│   ├── etapa-03.md                    → documentação da responsividade (Etapa 03)
+│   └── evidencias/
+│       └── etapa-03/                  → 9 capturas: 3 telas x 3 viewports
+└── web/                               → protótipo da interface (Etapas 02 e 03)
     ├── index.html                     → página inicial
     ├── grafo.html                     → grafo de conexões
     ├── personagens.html               → listagem
@@ -84,7 +88,7 @@ historia-em-grafos/
     ├── login.html                     → autenticação
     └── assets/
         └── css/
-            └── estilo.css             → folha de estilo única, compartilhada
+            └── estilo.css             → folha de estilo única — layout e responsividade
 ```
 
 ---
@@ -95,15 +99,17 @@ historia-em-grafos/
 |---|---|---|---|
 | **01** | Proposta e especificação do projeto | `etapa-01` | ✅ Entregue |
 | **02** | Protótipo estrutural com HTML semântico | `etapa-02` | ✅ Entregue |
-| 03 | — | — | ⏳ A definir |
+| **03** | Interface responsiva com CSS | `etapa-03` | ✅ Entregue |
+| 04 | — | — | ⏳ A definir |
 
 ---
 
 ## Status do projeto
 
 O repositório encontra-se na **fase de prototipação da interface**. A Etapa 01 entregou a
-definição do problema e a especificação funcional; a Etapa 02 entrega a primeira interface
-Web, construída com HTML semântico e sem comportamento dinâmico.
+definição do problema e a especificação funcional; a Etapa 02 entregou a primeira interface
+Web, construída com HTML semântico e sem comportamento dinâmico; a Etapa 03 torna essa
+interface responsiva — mesma estrutura HTML, adaptada de 1440px a 390px apenas com CSS.
 
 O código do cliente e do servidor descritos na *Stack pretendida* será incorporado nas etapas
 seguintes, conforme o desenvolvimento incremental previsto no plano de ensino.

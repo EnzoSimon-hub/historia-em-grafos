@@ -1,15 +1,34 @@
 /* ==========================================================================
-   História em Grafos — folha de estilo do protótipo estrutural (Etapa 02)
+   História em Grafos — folha de estilo única (Etapas 02 e 03)
    --------------------------------------------------------------------------
    Organizada na mesma ordem em que os elementos aparecem no documento:
-   1. Variáveis  2. Reset  3. Tipografia  4. Cabeçalho e navegação
-   5. Conteúdo principal  6. Artigos e listagens  7. Tabelas
-   8. Formulários  9. Botões  10. Rodapé  11. Responsividade
+    1. Variáveis (tema + escala de espaçamento)   2. Reset
+    3. Tipografia                                 4. Cabeçalho e navegação
+    5. Layout principal (Grid)                    6. Artigos e listagens
+    7. Tabelas                                    8. Formulários
+    9. Botões                                    10. Figura, legenda e rodapé
+   11. Responsividade (media queries)
+
+   Estratégia de responsividade (Etapa 03)
+   ---------------------------------------
+   A base é o layout de desktop; as media queries do item 11 vão reduzindo o
+   número de colunas até chegar a uma coluna única no telefone. São três
+   breakpoints, escolhidos para cair *entre* os viewports de referência da
+   entrega — 1440 x 900, 768 x 1024 e 390 x 844 — e nunca em cima deles:
+
+     largo     1024px  → notebook estreito e tablet em paisagem
+     médio      820px  → tablet em retrato (o viewport de 768px cai aqui)
+     estreito   560px  → smartphone (o viewport de 390px cai aqui)
+
+   Nenhuma largura intermediária fica sem regra: o que não é tratado por
+   media query é resolvido por Grid fluido (auto-fill / minmax), por Flexbox
+   com flex-wrap e por tipografia com clamp().
    ========================================================================== */
 
-/* ── 1. Variáveis de tema ────────────────────────────────────────────────── */
+/* ── 1. Variáveis ────────────────────────────────────────────────────────── */
 
 :root {
+  /* Cores */
   --bg:          #08080f;
   --surface:     #10101a;
   --surface-alt: #16162a;
@@ -26,11 +45,31 @@
   --plantageneta:  #8a6acc;
   --stuart:        #6aaa80;
 
+  /* Tipografia */
   --fonte-titulo: 'Cinzel', Georgia, 'Times New Roman', serif;
   --fonte-texto:  'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
 
+  /* Escala de espaçamento — todo espaço do layout sai daqui, para que
+     paddings, margens e gaps sejam múltiplos do mesmo passo de 0.25rem.
+     Um valor solto no meio do arquivo é sinal de que algo escapou da escala. */
+  --e-1: 0.25rem;
+  --e-2: 0.5rem;
+  --e-3: 0.75rem;
+  --e-4: 1rem;
+  --e-5: 1.5rem;
+  --e-6: 2rem;
+  --e-7: 3rem;
+
+  /* Margem lateral da página: encolhe sozinha entre 1rem e 1.5rem,
+     acompanhando a largura da tela, sem precisar de media query. */
+  --margem-lateral: clamp(1rem, 4vw, 1.5rem);
+
+  /* Alvo mínimo de toque em tela sensível (recomendação de acessibilidade). */
+  --alvo-toque: 44px;
+
   --raio: 4px;
   --largura-max: 1180px;
+  --largura-lateral: 300px;
 }
 
 /* ── 2. Reset ────────────────────────────────────────────────────────────── */
@@ -39,6 +78,9 @@
 *::before,
 *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* Impede o aumento automático de fonte na rotação do aparelho. */
+html { -webkit-text-size-adjust: 100%; }
+
 body {
   background: var(--bg);
   color: var(--text);
@@ -46,6 +88,9 @@ body {
   font-size: 15px;
   line-height: 1.6;
   min-height: 100vh;
+
+  /* Flexbox vertical: o <main> cresce e empurra o rodapé para o fim da
+     tela, mesmo nas páginas curtas como a de login. */
   display: flex;
   flex-direction: column;
 }
@@ -62,12 +107,14 @@ h1, h2, h3, h4 {
   line-height: 1.25;
 }
 
-h1 { font-size: 1.5rem; letter-spacing: 0.06em; }
-h2 { font-size: 1.35rem; margin-bottom: 0.6rem; }
+/* clamp(mínimo, fluido, máximo): o título acompanha a largura da tela sem
+   media query, e nunca sai do intervalo legível. */
+h1 { font-size: clamp(1.25rem, 1rem + 1.1vw, 1.5rem); letter-spacing: 0.06em; }
+h2 { font-size: clamp(1.15rem, 1rem + 0.7vw, 1.35rem); margin-bottom: var(--e-2); }
 h3 { font-size: 1.1rem; }
 h4 { font-size: 0.95rem; color: var(--text); }
 
-p { margin-bottom: 0.9rem; }
+p { margin-bottom: var(--e-3); }
 
 a {
   color: var(--gold);
@@ -91,21 +138,29 @@ mark {
   font-weight: 500;
 }
 
-/* ── 4. Cabeçalho e navegação ────────────────────────────────────────────── */
+/* ── 4. Cabeçalho e navegação ─────────────────────────────────────────────
+
+   Atenção ao alcance dos seletores: além do menu principal, há dois outros
+   <nav> nas páginas internas — a trilha de navegação e a paginação dos
+   resultados —, ambos com <ul class="legenda">. As regras que valem só para
+   o menu principal são escritas como `body > header > nav`.
+   ------------------------------------------------------------------------ */
 
 body > header {
   border-bottom: 1px solid var(--border);
   background: linear-gradient(180deg, #0d0d1a 0%, var(--bg) 100%);
-  padding: 1rem 1.5rem 0;
+  padding: var(--e-4) var(--margem-lateral) 0;
 }
 
+/* Título à esquerda, subtítulo à direita; flex-wrap empilha os dois
+   assim que deixam de caber lado a lado. */
 body > header > div {
   max-width: var(--largura-max);
   margin: 0 auto;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--e-4);
   flex-wrap: wrap;
 }
 
@@ -113,19 +168,19 @@ body > header p { color: var(--text-dim); font-size: 0.85rem; margin: 0; }
 
 nav {
   max-width: var(--largura-max);
-  margin: 0.9rem auto 0;
+  margin: var(--e-3) auto 0;
 }
 
 nav ul {
   list-style: none;
   display: flex;
-  gap: 0.25rem;
+  gap: var(--e-1);
   flex-wrap: wrap;
 }
 
 nav a {
   display: block;
-  padding: 0.55rem 0.95rem;
+  padding: var(--e-2) var(--e-3);
   color: var(--text-dim);
   border: 1px solid transparent;
   border-bottom: none;
@@ -142,27 +197,27 @@ nav a[aria-current="page"] {
   border-color: var(--border);
 }
 
-/* ── 5. Conteúdo principal ───────────────────────────────────────────────── */
+/* ── 5. Layout principal ─────────────────────────────────────────────────── */
 
 main {
   flex: 1;
   width: 100%;
   max-width: var(--largura-max);
   margin: 0 auto;
-  padding: 2rem 1.5rem 3rem;
+  padding: var(--e-6) var(--margem-lateral) var(--e-7);
 }
 
-main > section { margin-bottom: 2.5rem; }
+main > section { margin-bottom: var(--e-6); }
 
 /* Cabeçalho interno de seção: título à esquerda, ação à direita. */
 .barra {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--e-4);
   flex-wrap: wrap;
-  padding-bottom: 0.7rem;
-  margin-bottom: 1.2rem;
+  padding-bottom: var(--e-3);
+  margin-bottom: var(--e-5);
   border-bottom: 1px solid var(--border);
 }
 
@@ -174,16 +229,18 @@ main > section { margin-bottom: 2.5rem; }
   border-left: 3px solid var(--gold);
   background: var(--surface);
   border-radius: var(--raio);
-  padding: 1.8rem;
+  padding: var(--e-5);
 }
 
 .destaque p:last-child { margin-bottom: 0; }
 
-/* Grade genérica de cartões. */
+/* Grade genérica de cartões. auto-fill + minmax decidem sozinhos quantas
+   colunas cabem — 4 no desktop, 2 no tablet, 1 no telefone — de modo que a
+   listagem já se adapta antes de qualquer media query entrar em ação. */
 .grade {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
-  gap: 1rem;
+  gap: var(--e-4);
   list-style: none;
 }
 
@@ -191,7 +248,7 @@ main > section { margin-bottom: 2.5rem; }
 .indicadores {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1rem;
+  gap: var(--e-4);
   list-style: none;
 }
 
@@ -199,7 +256,7 @@ main > section { margin-bottom: 2.5rem; }
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--raio);
-  padding: 1.1rem 1.2rem;
+  padding: var(--e-4);
 }
 
 .indicadores h3 {
@@ -209,7 +266,7 @@ main > section { margin-bottom: 2.5rem; }
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--text-dim);
-  margin-bottom: 0.35rem;
+  margin-bottom: var(--e-1);
 }
 
 .indicadores p {
@@ -220,6 +277,14 @@ main > section { margin-bottom: 2.5rem; }
   line-height: 1;
 }
 
+/* Duas colunas: conteúdo + apoio lateral. Vira uma coluna em 820px. */
+.com-lateral {
+  display: grid;
+  grid-template-columns: 1fr var(--largura-lateral);
+  gap: var(--e-5);
+  align-items: start;
+}
+
 /* ── 6. Artigos e listagens ──────────────────────────────────────────────── */
 
 .grade > li > article,
@@ -228,13 +293,13 @@ article.ficha {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--raio);
-  padding: 1.1rem 1.2rem;
+  padding: var(--e-4);
   transition: border-color 0.15s;
 }
 
 .grade > li > article:hover { border-color: var(--gold-dim); }
 
-article header { margin-bottom: 0.7rem; }
+article header { margin-bottom: var(--e-3); }
 
 article h3 { margin-bottom: 0.15rem; }
 
@@ -252,12 +317,12 @@ article h3 { margin-bottom: 0.15rem; }
 .etiqueta[data-dinastia="Casa Plantageneta"] { color: var(--plantageneta); }
 .etiqueta[data-dinastia="Casa Stuart"]       { color: var(--stuart); }
 
-/* Lista de atributos nome/valor. */
+/* Lista de atributos nome/valor, em duas colunas de Grid. */
 dl.atributos {
   display: grid;
   grid-template-columns: max-content 1fr;
-  gap: 0.35rem 1.2rem;
-  margin-bottom: 1rem;
+  gap: var(--e-1) var(--e-4);
+  margin-bottom: var(--e-4);
 }
 
 dl.atributos dt {
@@ -273,15 +338,15 @@ dl.atributos dd { color: var(--text); }
 article footer {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-top: 0.9rem;
-  padding-top: 0.8rem;
+  gap: var(--e-1);
+  margin-top: var(--e-3);
+  padding-top: var(--e-3);
   border-top: 1px solid var(--border);
 }
 
 .selo {
   font-size: 0.72rem;
-  padding: 0.16rem 0.5rem;
+  padding: 0.16rem var(--e-2);
   border: 1px solid var(--border);
   border-radius: 2px;
   color: var(--text-dim);
@@ -293,10 +358,10 @@ article footer {
 
 .conexoes > li {
   border-bottom: 1px solid var(--border);
-  padding: 0.7rem 0;
+  padding: var(--e-3) 0;
   display: flex;
   align-items: baseline;
-  gap: 0.8rem;
+  gap: var(--e-3);
   flex-wrap: wrap;
 }
 
@@ -309,13 +374,23 @@ article footer {
   color: var(--gold-dim);
   border: 1px solid var(--gold-dim);
   border-radius: 2px;
-  padding: 0.1rem 0.45rem;
+  padding: 0.1rem var(--e-2);
   white-space: nowrap;
 }
 
 /* ── 7. Tabelas ──────────────────────────────────────────────────────────── */
 
-.rolagem { overflow-x: auto; }
+/* A tabela do painel continua sendo uma tabela em qualquer largura: ela é
+   uma matriz de linhas e colunas, e transformá-la em cartões empilhados com
+   display:block destruiria a associação célula/cabeçalho na leitura em voz
+   alta. Em vez disso, ela rola horizontalmente dentro da própria moldura —
+   assim o resto da página nunca precisa rolar de lado. */
+.rolagem {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--border);
+  border-radius: var(--raio);
+}
 
 table {
   width: 100%;
@@ -327,15 +402,18 @@ caption {
   text-align: left;
   color: var(--text-dim);
   font-size: 0.82rem;
-  padding-bottom: 0.6rem;
+  padding: var(--e-2) var(--e-3);
 }
 
 th, td {
   text-align: left;
-  padding: 0.65rem 0.8rem;
+  padding: var(--e-2) var(--e-3);
   border-bottom: 1px solid var(--border);
   white-space: nowrap;
 }
+
+tbody tr:last-child th,
+tbody tr:last-child td { border-bottom: none; }
 
 thead th {
   font-family: var(--fonte-texto);
@@ -349,15 +427,21 @@ thead th {
 
 tbody tr:hover { background: var(--surface); }
 
+/* Botões dentro de célula: folga entre eles sem quebrar a linha. */
+td .botao,
+td button { margin-right: var(--e-1); }
+
 /* ── 8. Formulários ──────────────────────────────────────────────────────── */
 
+/* Limite de largura para a linha de texto do formulário não ficar longa
+   demais no desktop; nas telas estreitas o valor simplesmente não se aplica. */
 form { max-width: 620px; }
 
 fieldset {
   border: 1px solid var(--border);
   border-radius: var(--raio);
-  padding: 1.3rem 1.4rem 1.5rem;
-  margin-bottom: 1.4rem;
+  padding: var(--e-5);
+  margin-bottom: var(--e-5);
   background: var(--surface);
 }
 
@@ -365,17 +449,17 @@ legend {
   font-family: var(--fonte-titulo);
   font-size: 0.95rem;
   color: var(--gold);
-  padding: 0 0.6rem;
+  padding: 0 var(--e-2);
   letter-spacing: 0.04em;
 }
 
-.campo { margin-bottom: 1.1rem; }
+.campo { margin-bottom: var(--e-4); }
 
 .campo:last-child { margin-bottom: 0; }
 
 label {
   display: block;
-  margin-bottom: 0.35rem;
+  margin-bottom: var(--e-1);
   font-size: 0.82rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -392,7 +476,7 @@ textarea {
   color: var(--text);
   font-family: inherit;
   font-size: 0.95rem;
-  padding: 0.6rem 0.75rem;
+  padding: var(--e-2) var(--e-3);
 }
 
 textarea { resize: vertical; min-height: 90px; }
@@ -409,7 +493,7 @@ input:invalid:not(:placeholder-shown) { border-color: var(--danger); }
 /* Texto de apoio ligado ao campo por aria-describedby. */
 .ajuda {
   display: block;
-  margin-top: 0.3rem;
+  margin-top: var(--e-1);
   color: var(--text-dim);
   font-size: 0.78rem;
   text-transform: none;
@@ -419,31 +503,35 @@ input:invalid:not(:placeholder-shown) { border-color: var(--danger); }
 /* Marca de campo obrigatório, ao lado do rótulo. */
 label .obrigatorio { color: var(--gold); }
 
-/* Par de campos lado a lado (ano de nascimento / ano de morte). */
+/* Par de campos lado a lado (ano de nascimento / ano de morte).
+   Vira uma coluna em 820px. */
 .dupla {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: var(--e-4);
 }
 
-/* Linha de busca. */
+/* Linha de busca: campo elástico + filtro, alinhados pela base. O
+   flex-basis de 200px faz o campo quebrar para a linha de baixo antes de
+   ficar estreito demais para ser usado. */
 search form {
   display: flex;
-  gap: 0.6rem;
+  gap: var(--e-2);
   align-items: flex-end;
+  flex-wrap: wrap;
   max-width: 100%;
-  margin-bottom: 1.4rem;
+  margin-bottom: var(--e-5);
 }
 
-search .campo { flex: 1; margin-bottom: 0; }
+search .campo { flex: 1 1 200px; margin-bottom: 0; }
 
 /* ── 9. Botões ───────────────────────────────────────────────────────────── */
 
 .acoes {
   display: flex;
-  gap: 0.7rem;
+  gap: var(--e-3);
   flex-wrap: wrap;
-  margin-top: 1.4rem;
+  margin-top: var(--e-5);
 }
 
 button,
@@ -451,7 +539,7 @@ button,
   font-family: var(--fonte-texto);
   font-size: 0.85rem;
   letter-spacing: 0.05em;
-  padding: 0.6rem 1.2rem;
+  padding: var(--e-2) var(--e-4);
   border: 1px solid var(--border);
   border-radius: var(--raio);
   background: var(--surface-alt);
@@ -488,14 +576,29 @@ figure {
   border: 1px solid var(--border);
   border-radius: var(--raio);
   background: var(--surface);
-  padding: 1.2rem;
+  padding: var(--e-4);
+}
+
+/* O SVG do grafo declara apenas viewBox: ocupa a largura disponível e
+   calcula a altura pela proporção, sem distorcer o desenho. */
+figure svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Moldura de rolagem só do desenho. A legenda e a <figcaption> ficam fora
+   dela, de modo que continuam visíveis enquanto o grafo é arrastado. */
+.rolagem-figura {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 figcaption {
   color: var(--text-dim);
   font-size: 0.82rem;
-  margin-top: 0.8rem;
-  padding-top: 0.8rem;
+  margin-top: var(--e-3);
+  padding-top: var(--e-3);
   border-top: 1px solid var(--border);
 }
 
@@ -503,18 +606,19 @@ figcaption {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem 1.3rem;
-  margin-top: 1rem;
+  gap: var(--e-1) var(--e-5);
+  margin-top: var(--e-4);
   font-size: 0.82rem;
 }
 
-.legenda li { display: flex; align-items: center; gap: 0.45rem; }
+.legenda li { display: flex; align-items: center; gap: var(--e-1); }
 
 .amostra {
   width: 12px;
   height: 12px;
   border-radius: 50%;
   display: inline-block;
+  flex-shrink: 0;
 }
 
 aside {
@@ -522,26 +626,18 @@ aside {
   border-left: 3px solid var(--gold-dim);
   border-radius: var(--raio);
   background: var(--surface);
-  padding: 1.1rem 1.2rem;
+  padding: var(--e-4);
   font-size: 0.88rem;
 }
 
-aside h3 { margin-bottom: 0.5rem; }
+aside h3 { margin-bottom: var(--e-2); }
 
 aside p:last-child { margin-bottom: 0; }
-
-/* Duas colunas: conteúdo + apoio lateral. */
-.com-lateral {
-  display: grid;
-  grid-template-columns: 1fr 300px;
-  gap: 1.5rem;
-  align-items: start;
-}
 
 body > footer {
   border-top: 1px solid var(--border);
   background: var(--surface);
-  padding: 1.5rem;
+  padding: var(--e-5) var(--margem-lateral);
   color: var(--text-dim);
   font-size: 0.83rem;
 }
@@ -551,23 +647,139 @@ body > footer > div {
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--e-4);
   flex-wrap: wrap;
 }
 
 body > footer p { margin: 0; }
 
-/* ── 11. Responsividade ──────────────────────────────────────────────────── */
+/* ==========================================================================
+   11. RESPONSIVIDADE
+   --------------------------------------------------------------------------
+   Três breakpoints, do mais largo para o mais estreito. Cada bloco redefine
+   apenas o que muda; o que não aparece aqui é herdado do layout base.
+   ========================================================================== */
 
-@media (max-width: 820px) {
-  .com-lateral { grid-template-columns: 1fr; }
-  .dupla { grid-template-columns: 1fr; }
-  search form { flex-direction: column; align-items: stretch; }
+/* ── 11.1 Até 1024px — notebook estreito e tablet em paisagem ────────────── */
+
+@media (max-width: 1024px) {
+
+  /* A coluna de apoio estreita antes de ser abandonada, para que a área
+     principal (o grafo, o formulário) não fique espremida. Como é uma
+     variável, basta trocá-la aqui: a regra de .com-lateral não muda. */
+  :root { --largura-lateral: 240px; }
+
+  /* Cartões um pouco menores: preserva 3 colunas onde já só caberiam 2. */
+  .grade { grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); }
 }
 
-@media (max-width: 520px) {
-  main { padding: 1.5rem 1rem 2.5rem; }
-  body > header { padding: 1rem 1rem 0; }
-  nav ul { gap: 0; }
-  nav a { padding: 0.5rem 0.7rem; font-size: 0.82rem; }
+/* ── 11.2 Até 820px — tablet em retrato (viewport de 768 x 1024) ─────────── */
+
+@media (max-width: 820px) {
+
+  /* Fim das duas colunas: o apoio lateral passa a vir depois do conteúdo,
+     na mesma ordem em que já estava no HTML. */
+  .com-lateral { grid-template-columns: 1fr; }
+
+  /* Formulário: o par de anos deixa de dividir a linha. */
+  .dupla { grid-template-columns: 1fr; }
+
+  /* Busca: campo e filtro empilhados, cada um em largura total. */
+  search form { flex-direction: column; align-items: stretch; }
+  search .campo { flex: none; }
+
+  /* O grafo tem 900px de desenho. Em vez de encolhê-lo até os rótulos das
+     arestas ficarem ilegíveis, o desenho passa a rolar lateralmente dentro
+     da sua moldura e mantém uma largura mínima em que ainda se lê o que
+     está escrito. A legenda e a legenda-texto continuam fixas embaixo. */
+  .rolagem-figura svg { min-width: 660px; }
+
+  /* Rodapé em duas linhas, alinhado à esquerda. */
+  body > footer > div { flex-direction: column; gap: var(--e-1); }
+}
+
+/* ── 11.3 Até 560px — smartphone (viewport de 390 x 844) ─────────────────── */
+
+@media (max-width: 560px) {
+
+  /* Menu: as abas horizontais viram uma grade de dois botões por linha, com
+     o último ocupando a linha inteira. Todos os cinco destinos continuam
+     visíveis — sem rolagem lateral e sem esconder nada atrás de um ícone,
+     o que exigiria JavaScript, fora do escopo destas etapas. */
+  body > header { padding-bottom: var(--e-4); }
+
+  body > header > nav ul {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--e-1);
+  }
+
+  body > header > nav li:last-child { grid-column: 1 / -1; }
+
+  body > header > nav a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--alvo-toque);
+    text-align: center;
+    background: var(--surface);
+    border-color: var(--border);
+    border-bottom: 1px solid var(--border);
+    border-radius: var(--raio);
+  }
+
+  /* Uma coluna em todas as grades de cartões. */
+  .grade,
+  .indicadores { grid-template-columns: 1fr; }
+
+  /* Barra de seção: título em cima, ação embaixo e em largura total. */
+  .barra { flex-direction: column; align-items: stretch; gap: var(--e-3); }
+
+  /* Botões ocupam a linha inteira e respeitam o alvo mínimo de toque —
+     é o que torna a interface utilizável com o polegar. */
+  .barra .botao,
+  .acoes > button,
+  .acoes > .botao {
+    width: 100%;
+    text-align: center;
+  }
+
+  .acoes { flex-direction: column; gap: var(--e-2); }
+
+  button,
+  .botao { min-height: var(--alvo-toque); padding: var(--e-3) var(--e-4); }
+
+  /* Campos com 16px evitam que o iOS aplique zoom automático ao receber
+     o foco — abaixo disso o navegador amplia a página inteira. */
+  input,
+  select,
+  textarea { font-size: 16px; min-height: var(--alvo-toque); }
+
+  /* Molduras mais justas: sobra pouca largura para gastar com padding. */
+  .destaque,
+  fieldset,
+  figure { padding: var(--e-4); }
+
+  main { padding-top: var(--e-5); }
+
+  /* Atributos nome/valor empilhados: em duas colunas, o valor ficaria
+     numa faixa estreita demais e quebraria em várias linhas. */
+  dl.atributos { grid-template-columns: 1fr; row-gap: 0; }
+  dl.atributos dt { margin-top: var(--e-2); }
+
+  /* Legenda do grafo em coluna: lado a lado, os nomes das dinastias
+     quebrariam no meio. */
+  .legenda { flex-direction: column; gap: var(--e-1); }
+
+  /* A trilha de navegação e a paginação reaproveitam .legenda, mas são
+     poucos itens curtos e continuam em linha. */
+  nav .legenda { flex-direction: row; gap: var(--e-1) var(--e-3); }
+
+  table { font-size: 0.82rem; }
+}
+
+/* ── 11.4 Preferência declarada pelo usuário ─────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
 }
