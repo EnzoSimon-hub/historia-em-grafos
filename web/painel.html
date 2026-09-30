@@ -33,43 +33,35 @@
       <div class="acoes" style="margin-top:0">
         <a class="botao botao-principal" href="cadastro-personagem.html">+ Nova entidade</a>
         <a class="botao" href="cadastro-relacao.html">+ Nova relação</a>
+        <button type="button" id="restaurar-acervo">Restaurar acervo de exemplo</button>
       </div>
     </div>
+
+    <p class="status" id="status-painel" role="status" hidden></p>
 
     <section aria-labelledby="titulo-indicadores">
       <h3 id="titulo-indicadores">Acervo em números</h3>
 
-      <ul class="indicadores">
-        <li>
-          <article>
-            <h3>Personagens</h3>
-            <p>6</p>
-          </article>
-        </li>
-        <li>
-          <article>
-            <h3>Eventos</h3>
-            <p>4</p>
-          </article>
-        </li>
-        <li>
-          <article>
-            <h3>Locais</h3>
-            <p>3</p>
-          </article>
-        </li>
-        <li>
-          <article>
-            <h3>Relações</h3>
-            <p>19</p>
-          </article>
-        </li>
+      <ul class="indicadores" id="indicadores">
+        <li><article><h3>Personagens</h3><p data-contagem="personagens">—</p></article></li>
+        <li><article><h3>Eventos</h3><p data-contagem="eventos">—</p></article></li>
+        <li><article><h3>Locais</h3><p data-contagem="locais">—</p></article></li>
+        <li><article><h3>Relações</h3><p data-contagem="relacoes">—</p></article></li>
       </ul>
     </section>
 
     <section aria-labelledby="titulo-entidades">
       <div class="barra">
         <h3 id="titulo-entidades">Entidades cadastradas</h3>
+        <div class="campo filtro-tipo">
+          <label for="filtro-tipo">Mostrar</label>
+          <select id="filtro-tipo">
+            <option value="">Todos os tipos</option>
+            <option value="Personagem">Personagens</option>
+            <option value="Evento">Eventos</option>
+            <option value="Local">Locais</option>
+          </select>
+        </div>
       </div>
 
       <div class="rolagem">
@@ -87,63 +79,7 @@
               <th scope="col">Ações</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <th scope="row"><small>PER-0001</small></th>
-              <td>Personagem</td>
-              <td><a href="personagem.html">Henrique VII</a></td>
-              <td>Casa Tudor · 1457 – 1509</td>
-              <td>3</td>
-              <td>
-                <a class="botao" href="cadastro-personagem.html">Editar</a>
-                <button type="button" class="botao-perigo">Remover</button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row"><small>PER-0002</small></th>
-              <td>Personagem</td>
-              <td><a href="personagem.html">Henrique VIII</a></td>
-              <td>Casa Tudor · 1491 – 1547</td>
-              <td>5</td>
-              <td>
-                <a class="botao" href="cadastro-personagem.html">Editar</a>
-                <button type="button" class="botao-perigo">Remover</button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row"><small>PER-0004</small></th>
-              <td>Personagem</td>
-              <td><a href="personagem.html">Ricardo III</a></td>
-              <td>Casa York · 1452 – 1485</td>
-              <td>2</td>
-              <td>
-                <a class="botao" href="cadastro-personagem.html">Editar</a>
-                <button type="button" class="botao-perigo">Remover</button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row"><small>EVE-0001</small></th>
-              <td>Evento</td>
-              <td><a href="grafo.html">Batalha de Bosworth</a></td>
-              <td><time datetime="1485-08-22">22 de agosto de 1485</time></td>
-              <td>4</td>
-              <td>
-                <a class="botao" href="cadastro-personagem.html">Editar</a>
-                <button type="button" class="botao-perigo">Remover</button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row"><small>LOC-0001</small></th>
-              <td>Local</td>
-              <td><a href="grafo.html">Inglaterra</a></td>
-              <td>Reino · contém York</td>
-              <td>5</td>
-              <td>
-                <a class="botao" href="cadastro-personagem.html">Editar</a>
-                <button type="button" class="botao-perigo">Remover</button>
-              </td>
-            </tr>
-          </tbody>
+          <tbody id="tabela-entidades"></tbody>
         </table>
       </div>
     </section>
@@ -152,7 +88,7 @@
       <h3 id="titulo-remocao">Confirmação de remoção</h3>
 
       <div class="com-lateral">
-        <form action="painel.html" method="post">
+        <form action="painel.html" method="post" id="form-remocao" novalidate>
           <fieldset>
             <legend>Remover entidade</legend>
 
@@ -161,16 +97,13 @@
               <select id="entidade-remover" name="entidade" required
                       aria-describedby="ajuda-remover">
                 <option value="">— selecione —</option>
-                <option value="PER-0001">Henrique VII</option>
-                <option value="PER-0002">Henrique VIII</option>
-                <option value="PER-0004">Ricardo III</option>
-                <option value="EVE-0001">Batalha de Bosworth</option>
-                <option value="LOC-0001">Inglaterra</option>
               </select>
               <small class="ajuda" id="ajuda-remover">
                 Remover uma entidade também desfaz todas as relações ligadas a ela.
                 A operação não pode ser desfeita.
               </small>
+              <small class="ajuda" id="impacto-remocao" aria-live="polite"></small>
+              <small class="erro" id="erro-entidade" hidden></small>
             </div>
 
             <div class="campo">
@@ -179,12 +112,13 @@
                        style="width:auto; margin-right:0.5rem">
                 Confirmo que entendi as consequências
               </label>
+              <small class="erro" id="erro-confirmar" hidden></small>
             </div>
           </fieldset>
 
           <div class="acoes">
             <button type="submit" class="botao-perigo">Remover definitivamente</button>
-            <a class="botao" href="painel.html">Cancelar</a>
+            <button type="reset">Cancelar</button>
           </div>
         </form>
 
@@ -201,12 +135,28 @@
 
   </main>
 
+  <dialog id="modal-remocao" aria-labelledby="modal-titulo" aria-describedby="modal-texto">
+    <form method="dialog">
+      <h3 id="modal-titulo">Remover entidade?</h3>
+      <p id="modal-texto"></p>
+      <ul class="conexoes" id="modal-relacoes"></ul>
+      <p><small>A operação não pode ser desfeita.</small></p>
+      <div class="acoes">
+        <button type="submit" value="confirmar" class="botao-perigo">Remover definitivamente</button>
+        <button type="button" id="modal-cancelar" autofocus>Cancelar</button>
+      </div>
+    </form>
+  </dialog>
+
   <footer>
     <div>
-      <p>História em Grafos — protótipo estrutural (Etapa 02)</p>
+      <p>História em Grafos — protótipo interativo (Etapa 04)</p>
       <p>Enzo Simon · Tecnologia de Construção de Software 1</p>
     </div>
   </footer>
+
+  <script src="assets/js/acervo.js"></script>
+  <script src="assets/js/painel.js"></script>
 
 </body>
 </html>

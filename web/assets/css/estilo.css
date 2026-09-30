@@ -1,5 +1,5 @@
 /* ==========================================================================
-   História em Grafos — folha de estilo única (Etapas 02 e 03)
+   História em Grafos — folha de estilo única (Etapas 02, 03 e 04)
    --------------------------------------------------------------------------
    Organizada na mesma ordem em que os elementos aparecem no documento:
     1. Variáveis (tema + escala de espaçamento)   2. Reset
@@ -7,7 +7,7 @@
     5. Layout principal (Grid)                    6. Artigos e listagens
     7. Tabelas                                    8. Formulários
     9. Botões                                    10. Figura, legenda e rodapé
-   11. Responsividade (media queries)
+   11. Responsividade (media queries)       12. Estados controlados por JavaScript
 
    Estratégia de responsividade (Etapa 03)
    ---------------------------------------
@@ -782,4 +782,109 @@ body > footer p { margin: 0; }
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
+}
+
+/* ==========================================================================
+   12. ESTADOS CONTROLADOS POR JAVASCRIPT (Etapa 04)
+   --------------------------------------------------------------------------
+   Classes e atributos que os scripts de assets/js/ ligam e desligam:
+   mensagens de status, erros de campo, estado vazio, destaque do cartão
+   recém-cadastrado e o modal de remoção. Nenhuma media query aqui — as
+   regras responsivas continuam todas na seção 11.
+   ========================================================================== */
+
+/* O atributo hidden precisa vencer regras de display como a de button
+   (inline-block) e .acoes (flex); sem isto, esconder pelo script falha. */
+[hidden] { display: none !important; }
+
+/* Mensagem de status (role="status" ou role="alert"). */
+.status {
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--text-dim);
+  border-radius: var(--raio);
+  background: var(--surface);
+  padding: var(--e-3) var(--e-4);
+  margin-bottom: var(--e-5);
+}
+
+.status:focus { outline: 2px solid var(--gold-dim); outline-offset: 2px; }
+
+.status-sucesso { border-left-color: var(--success); background: #0f1f18; }
+.status-aviso   { border-left-color: var(--gold);    background: #1a1608; }
+.status-erro    { border-left-color: var(--danger);  background: #1f0e0e; }
+
+.status ul { margin: var(--e-2) 0 0 var(--e-5); }
+.status li { margin-bottom: var(--e-1); }
+
+/* Erro de um campo, logo abaixo dele. */
+.erro {
+  display: block;
+  margin-top: var(--e-1);
+  color: #e08a8a;
+  font-size: 0.8rem;
+}
+
+.erro::before { content: '⚠ '; }
+
+input[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"] { border-color: var(--danger); }
+
+input[type="checkbox"][aria-invalid="true"] { outline: 2px solid var(--danger); }
+
+/* Contador de caracteres, à direita do texto de ajuda. */
+.contador { float: right; font-variant-numeric: tabular-nums; }
+.contador-alerta { color: var(--gold); }
+
+/* Listagem sem resultado. */
+.vazio {
+  text-align: center;
+  border: 1px dashed var(--border);
+  border-radius: var(--raio);
+  padding: var(--e-6) var(--e-4);
+  color: var(--text-dim);
+}
+
+/* Cartão recém-cadastrado, vindo do formulário. */
+.grade > li > article.novo {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 1px var(--gold-dim);
+}
+
+/* Filtro de tipo no cabeçalho da tabela do painel. */
+.barra .filtro-tipo { margin-bottom: 0; min-width: 180px; }
+
+/* Botão de envio destrutivo: sem esta regra, button[type="submit"] (mais
+   específica que .botao-perigo) o pintava de dourado, como ação principal. */
+button[type="submit"].botao-perigo {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: var(--text);
+}
+
+button[type="submit"].botao-perigo:hover { background: #a82a2a; border-color: #a82a2a; }
+
+/* Botões lado a lado dentro da célula de ações. */
+td .botao-perigo { margin-left: var(--e-1); }
+
+/* Modal de confirmação de remoção. */
+dialog {
+  width: min(520px, calc(100% - 2 * var(--margem-lateral)));
+  margin: auto;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--danger);
+  border-radius: var(--raio);
+  padding: var(--e-5);
+}
+
+dialog::backdrop { background: rgba(4, 4, 10, 0.75); }
+
+dialog form { max-width: none; }
+
+dialog .conexoes {
+  max-height: 40vh;
+  overflow-y: auto;
+  margin-bottom: var(--e-4);
+  font-size: 0.88rem;
 }

@@ -45,7 +45,9 @@
       <section aria-labelledby="titulo-form">
         <h3 id="titulo-form" hidden>Dados do personagem</h3>
 
-        <form action="painel.html" method="post">
+        <form action="personagens.html" method="post" id="form-personagem" novalidate>
+
+          <div class="status status-erro" id="resumo-erros" role="alert" tabindex="-1" hidden></div>
 
           <fieldset>
             <legend>Identificação</legend>
@@ -57,6 +59,7 @@
               <small class="ajuda" id="ajuda-nome">
                 Nome pelo qual o personagem é conhecido historicamente.
               </small>
+              <small class="erro" id="erro-nome" hidden></small>
             </div>
 
             <div class="campo">
@@ -73,6 +76,7 @@
               <small class="ajuda" id="ajuda-dinastia">
                 Casa, família ou facção de origem. Define a cor do nó no grafo.
               </small>
+              <small class="erro" id="erro-dinastia" hidden></small>
             </div>
           </fieldset>
 
@@ -85,12 +89,15 @@
                 <input type="number" id="ano-nascimento" name="anoNascimento"
                        min="-3000" max="2100" step="1" placeholder="1457"
                        aria-describedby="ajuda-anos">
+                <small class="erro" id="erro-ano-nascimento" hidden></small>
               </div>
 
               <div class="campo">
                 <label for="ano-morte">Ano de morte</label>
                 <input type="number" id="ano-morte" name="anoMorte"
-                       min="-3000" max="2100" step="1" placeholder="1509">
+                       min="-3000" max="2100" step="1" placeholder="1509"
+                       aria-describedby="ajuda-anos">
+                <small class="erro" id="erro-ano-morte" hidden></small>
               </div>
             </div>
 
@@ -110,7 +117,9 @@
                         aria-describedby="ajuda-notas"></textarea>
               <small class="ajuda" id="ajuda-notas">
                 Campo livre, não exibido na consulta pública.
+                <span class="contador" id="contador-notas" aria-live="polite">0 / 800</span>
               </small>
+              <small class="erro" id="erro-notas" hidden></small>
             </div>
           </fieldset>
 
@@ -147,10 +156,13 @@
 
   <footer>
     <div>
-      <p>História em Grafos — protótipo estrutural (Etapa 02)</p>
+      <p>História em Grafos — protótipo interativo (Etapa 04)</p>
       <p>Enzo Simon · Tecnologia de Construção de Software 1</p>
     </div>
   </footer>
+
+  <script src="assets/js/acervo.js"></script>
+  <script src="assets/js/cadastro-personagem.js"></script>
 
 </body>
 </html>
