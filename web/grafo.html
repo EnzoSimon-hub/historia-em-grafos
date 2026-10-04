@@ -40,120 +40,45 @@
 
         <figure>
           <div class="rolagem-figura">
-          <svg viewBox="0 0 900 520" role="img" aria-labelledby="svg-titulo svg-desc">
+          <svg viewBox="0 0 900 600" role="img" aria-labelledby="svg-titulo svg-desc">
             <title id="svg-titulo">Rede de conexões do acervo</title>
-            <desc id="svg-desc">
-              Seis personagens, um evento e um local ligados por relações tipadas.
-              Henrique VII é pai de Henrique VIII, que é pai de Elizabeth I e governou
-              a Inglaterra. Henrique VII lutou contra Ricardo III, que se aliou a
-              Eduardo IV e participou da Batalha de Bosworth, ocorrida na Inglaterra.
-              Elizabeth I lutou contra Maria, Rainha dos Escoceses.
-            </desc>
+            <desc id="svg-desc">Rede de entidades e relações do acervo.</desc>
 
             <defs>
               <marker id="seta" viewBox="0 0 10 10" refX="9" refY="5"
                       markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-                <path d="M 0 0 L 10 5 L 0 10 z" fill="#6b6580"/>
+                <path class="seta-ponta" d="M 0 0 L 10 5 L 0 10 z"/>
               </marker>
             </defs>
 
-            <style>
-              .aresta { stroke: #6b6580; stroke-width: 1.4; marker-end: url(#seta); }
-              .rotulo {
-                font-family: ui-monospace, Consolas, monospace; font-size: 10px;
-                fill: #7a6228; text-anchor: middle;
-                paint-order: stroke; stroke: #08080f; stroke-width: 4px;
-                stroke-linejoin: round;
-              }
-              .no      { fill: #10101a; stroke-width: 1.6; }
-              .nome    { font-family: Inter, sans-serif; font-size: 13px; fill: #d8d0c0; text-anchor: middle; }
-              .miudo   { font-family: Inter, sans-serif; font-size: 10px; fill: #6b6580; text-anchor: middle; }
-            </style>
-
-            <!-- ── Arestas (desenhadas antes dos nós) ── -->
-            <g>
-              <line class="aresta" x1="185" y1="130" x2="265" y2="110"/>
-              <text class="rotulo" x="225" y="112">PAI_DE</text>
-
-              <line class="aresta" x1="415" y1="87" x2="525" y2="83"/>
-              <text class="rotulo" x="470" y="77">PAI_DE</text>
-
-              <line class="aresta" x1="146" y1="172" x2="304" y2="268"/>
-              <text class="rotulo" x="225" y="214">LUTOU_CONTRA</text>
-
-              <line class="aresta" x1="166" y1="358" x2="284" y2="312"/>
-              <text class="rotulo" x="225" y="329">ALIOU_SE_COM</text>
-
-              <line class="aresta" x1="392" y1="312" x2="556" y2="381"/>
-              <text class="rotulo" x="474" y="340">PARTICIPOU_DA</text>
-
-              <line class="aresta" x1="646" y1="102" x2="744" y2="148"/>
-              <text class="rotulo" x="695" y="119">LUTOU_CONTRA</text>
-
-              <line class="aresta" x1="745" y1="324" x2="643" y2="378"/>
-              <text class="rotulo" x="694" y="345">HOUVE_A</text>
-
-              <line class="aresta" x1="387" y1="112" x2="742" y2="278"/>
-              <text class="rotulo" x="564" y="189">GOVERNOU</text>
-            </g>
-
-            <!-- ── Personagens: retângulo, cor da dinastia ── -->
-            <g>
-              <rect class="no" x="35"  y="128" width="150" height="44" rx="3" stroke="#c9a84c"/>
-              <text class="nome" x="110" y="147">Henrique VII</text>
-              <text class="miudo" x="110" y="162">1457 – 1509</text>
-
-              <rect class="no" x="265" y="68"  width="150" height="44" rx="3" stroke="#c9a84c"/>
-              <text class="nome" x="340" y="87">Henrique VIII</text>
-              <text class="miudo" x="340" y="102">1491 – 1547</text>
-
-              <rect class="no" x="525" y="58"  width="150" height="44" rx="3" stroke="#c9a84c"/>
-              <text class="nome" x="600" y="77">Elizabeth I</text>
-              <text class="miudo" x="600" y="92">1533 – 1603</text>
-
-              <rect class="no" x="265" y="268" width="150" height="44" rx="3" stroke="#6a8acc"/>
-              <text class="nome" x="340" y="287">Ricardo III</text>
-              <text class="miudo" x="340" y="302">1452 – 1485</text>
-
-              <rect class="no" x="35"  y="358" width="150" height="44" rx="3" stroke="#8a6acc"/>
-              <text class="nome" x="110" y="377">Eduardo IV</text>
-              <text class="miudo" x="110" y="392">1442 – 1483</text>
-
-              <rect class="no" x="695" y="148" width="190" height="44" rx="3" stroke="#6aaa80"/>
-              <text class="nome" x="790" y="167">Maria, Rainha dos</text>
-              <text class="nome" x="790" y="183">Escoceses</text>
-            </g>
-
-            <!-- ── Evento: círculo laranja ── -->
-            <g>
-              <circle class="no" cx="600" cy="400" r="48" stroke="#cc7a33"/>
-              <text class="nome" x="600" y="394">Batalha de</text>
-              <text class="nome" x="600" y="410">Bosworth</text>
-              <text class="miudo" x="600" y="426">1485</text>
-            </g>
-
-            <!-- ── Local: elipse verde ── -->
-            <g>
-              <ellipse class="no" cx="790" cy="300" rx="72" ry="30" stroke="#4a8a5c"/>
-              <text class="nome" x="790" y="305">Inglaterra</text>
-            </g>
+            <!-- Preenchidos por assets/js/grafo.js a partir dos dados do acervo.
+                 As arestas vêm antes para que os nós sejam desenhados por cima. -->
+            <g id="grafo-arestas"></g>
+            <g id="grafo-nos"></g>
           </svg>
           </div>
 
+          <noscript>
+            <p class="status status-aviso">
+              O grafo é desenhado por JavaScript. Ative o JavaScript do navegador para ver
+              a rede do acervo.
+            </p>
+          </noscript>
+
           <ul class="legenda">
-            <li><span class="amostra" style="background:#c9a84c"></span> Casa Tudor</li>
-            <li><span class="amostra" style="background:#6a8acc"></span> Casa York</li>
-            <li><span class="amostra" style="background:#8a6acc"></span> Casa Plantageneta</li>
-            <li><span class="amostra" style="background:#6aaa80"></span> Casa Stuart</li>
-            <li><span class="amostra" style="background:#cc7a33"></span> Evento</li>
-            <li><span class="amostra" style="background:#4a8a5c"></span> Local</li>
+            <li><span class="amostra" data-dinastia="Casa Tudor"></span> Casa Tudor</li>
+            <li><span class="amostra" data-dinastia="Casa York"></span> Casa York</li>
+            <li><span class="amostra" data-dinastia="Casa Plantageneta"></span> Casa Plantageneta</li>
+            <li><span class="amostra" data-dinastia="Casa Stuart"></span> Casa Stuart</li>
+            <li><span class="amostra amostra-evento"></span> Evento</li>
+            <li><span class="amostra amostra-local"></span> Local</li>
           </ul>
 
           <figcaption>
-            Recorte do acervo com oito relações. Personagens são retângulos coloridos pela
-            dinastia, eventos são círculos e locais são elipses. As setas indicam a direção
-            da relação e o rótulo indica o seu tipo. Nesta etapa a rede é uma ilustração
-            estática; a renderização interativa entra em etapa posterior.
+            O acervo inteiro, desenhado a partir dos mesmos dados da listagem e do painel.
+            Personagens são retângulos coloridos pela dinastia, eventos são círculos e locais
+            são elipses, distribuídos numa elipse e agrupados por tipo. As setas indicam a
+            direção da relação e o rótulo indica o seu tipo.
           </figcaption>
         </figure>
       </section>
@@ -214,6 +139,9 @@
       <p>Enzo Simon · Tecnologia de Construção de Software 1</p>
     </div>
   </footer>
+
+  <script src="assets/js/acervo.js"></script>
+  <script src="assets/js/grafo.js"></script>
 
 </body>
 </html>

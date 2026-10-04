@@ -888,3 +888,49 @@ dialog .conexoes {
   margin-bottom: var(--e-4);
   font-size: 0.88rem;
 }
+
+/* Grafo desenhado por grafo.js (posterior à Etapa 04). Fica no fim do
+   arquivo para não deslocar as linhas citadas em docs/etapa-03.md e
+   docs/etapa-04.md. A cor da borda de cada personagem segue o padrão da
+   .etiqueta: o atributo data-dinastia escolhe a variável; dinastia sem cor
+   própria fica com a borda neutra de .no. */
+:root {
+  --evento: #cc7a33;
+  --local:  #4a8a5c;
+}
+
+.aresta { stroke: var(--text-dim); stroke-width: 1.4; }
+
+.seta-ponta { fill: var(--text-dim); }
+
+.rotulo {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 10px;
+  fill: var(--gold-dim);
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: var(--bg);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
+.no { fill: var(--surface); stroke: var(--text-dim); stroke-width: 1.6; }
+
+.no-personagem[data-dinastia="Casa Tudor"]        { stroke: var(--tudor); }
+.no-personagem[data-dinastia="Casa York"]         { stroke: var(--york); }
+.no-personagem[data-dinastia="Casa Plantageneta"] { stroke: var(--plantageneta); }
+.no-personagem[data-dinastia="Casa Stuart"]       { stroke: var(--stuart); }
+.no-evento { stroke: var(--evento); }
+.no-local  { stroke: var(--local); }
+
+.nome  { font-family: var(--fonte-texto); font-size: 13px; fill: var(--text); text-anchor: middle; }
+.miudo { font-family: var(--fonte-texto); font-size: 10px; fill: var(--text-dim); text-anchor: middle; }
+
+/* Legenda: as mesmas variáveis dos nós, no lugar de cores escritas no HTML. */
+.amostra                                    { background: var(--text-dim); }
+.amostra[data-dinastia="Casa Tudor"]        { background: var(--tudor); }
+.amostra[data-dinastia="Casa York"]         { background: var(--york); }
+.amostra[data-dinastia="Casa Plantageneta"] { background: var(--plantageneta); }
+.amostra[data-dinastia="Casa Stuart"]       { background: var(--stuart); }
+.amostra-evento                             { background: var(--evento); }
+.amostra-local                              { background: var(--local); }

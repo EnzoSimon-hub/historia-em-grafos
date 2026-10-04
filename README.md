@@ -107,7 +107,8 @@ historia-em-grafos/
             ├── acervo.js              → dados do acervo e funções compartilhadas
             ├── personagens.js         → pesquisa, filtro e ordenação
             ├── cadastro-personagem.js → validação e inclusão
-            └── painel.js              → painel dinâmico e remoção em cascata
+            ├── painel.js              → painel dinâmico e remoção em cascata
+            └── grafo.js               → grafo de conexões desenhado a partir do acervo
 ```
 
 ---
