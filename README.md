@@ -108,7 +108,9 @@ historia-em-grafos/
             ├── personagens.js         → pesquisa, filtro e ordenação
             ├── cadastro-personagem.js → validação e inclusão
             ├── painel.js              → painel dinâmico e remoção em cascata
-            └── grafo.js               → grafo de conexões desenhado a partir do acervo
+            ├── grafo.js               → grafo de conexões desenhado a partir do acervo
+            └── vendor/
+                └── cytoscape.min.js   → biblioteca Cytoscape.js 3.34.3 (MIT), cópia local
 ```
 
 ---

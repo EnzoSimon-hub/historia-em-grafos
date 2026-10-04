@@ -1,62 +1,59 @@
 /* ==========================================================================
    História em Grafos — grafo.js
    --------------------------------------------------------------------------
-   Desenha a rede do acervo a partir dos dados de acervo.js, no lugar da
-   ilustração escrita à mão nas Etapas 02 e 03. O grafo passa a mostrar as
-   mesmas entidades e relações que a listagem e o painel.
+   Desenha a rede do acervo a partir dos dados de acervo.js, usando a
+   biblioteca Cytoscape.js (cópia local em assets/js/vendor/, para continuar
+   abrindo com duplo clique e sem internet).
 
-   Layout: os nós ficam distribuídos numa elipse, em ângulos iguais e
-   agrupados por tipo (personagens, eventos, locais):
-     x = centroX + RAIO_X · cos(ângulo)      y = centroY + RAIO_Y · sen(ângulo)
+   Este arquivo só traduz o acervo para o formato da biblioteca e decide a
+   aparência. Desenho, zoom, arraste e layout ficam com o Cytoscape.
 
-   Fluxo:  Acervo.carregar()  →  montarNo()  →  posicionar()
-           →  desenharArestas()  →  desenharNos()  →  descrever()
+   Layout: os nós partem de uma elipse, agrupados por tipo, e o algoritmo de
+   forças "cose" refina as posições — nós se repelem, arestas puxam como
+   molas. Partir sempre da mesma elipse faz o desenho sair igual a cada
+   abertura da página, em vez de mudar a cada recarga.
+
+   Fluxo:  Acervo.carregar()  →  montarElementos()  →  cytoscape({ ... })
+           →  destacar vizinhança ao clicar  →  listarEmTexto()
    ========================================================================== */
 
 (function () {
   'use strict';
 
-  /* Elementos SVG precisam ser criados no namespace do SVG: com o
-     createElement comum, o navegador cria a tag mas não a desenha. */
-  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const area  = document.getElementById('grafo');
+  const lista = document.getElementById('grafo-lista');
 
-  /* Área de desenho: os mesmos valores do viewBox do <svg> em grafo.html. */
-  const LARGURA = 900;
-  const ALTURA = 600;
-
-  /* Raios da elipse. Ela é mais larga que alta porque os retângulos dos
-     personagens também são: num círculo, os do topo se encostariam. */
-  const RAIO_X = 370;
-  const RAIO_Y = 230;
-
-  const ALTURA_DA_LINHA = 15;
-
-  /* Espaço entre a ponta da seta e a borda do nó de destino. */
-  const FOLGA_SETA = 3;
-
-  /* Onde o rótulo fica ao longo da aresta (0 = origem, 1 = destino). No meio
-     (0.5), as arestas longas cruzam o centro da elipse e os rótulos se
-     amontoam lá; mais perto do destino, eles se espalham em volta. */
-  const POSICAO_DO_ROTULO = 0.65;
-
-  const camadaArestas = document.getElementById('grafo-arestas');
-  const camadaNos     = document.getElementById('grafo-nos');
-  const descricao     = document.getElementById('svg-desc');
-
-  /* ── Utilitários ─────────────────────────────────────────────────────── */
-
-  function criarSvg(tag, atributos, texto) {
-    const elemento = document.createElementNS(SVG_NS, tag);
-    Object.entries(atributos || {}).forEach(function (par) {
-      elemento.setAttribute(par[0], par[1]);
-    });
-    if (texto !== undefined) elemento.textContent = texto;
-    return elemento;
+  /* As cores vêm das variáveis do estilo.css: o Cytoscape desenha em
+     <canvas> e não enxerga o CSS, mas assim a fonte única continua sendo
+     a folha de estilo. */
+  const css = getComputedStyle(document.documentElement);
+  function cor(variavel) {
+    return css.getPropertyValue(variavel).trim();
   }
 
-  /* Uma casa decimal basta para o desenho e deixa o SVG gerado legível. */
-  function arredondar(numero) {
-    return Math.round(numero * 10) / 10;
+  const COR_DA_DINASTIA = {
+    'Casa Tudor':        cor('--tudor'),
+    'Casa York':         cor('--york'),
+    'Casa Plantageneta': cor('--plantageneta'),
+    'Casa Stuart':       cor('--stuart')
+  };
+
+  /* ── Situações em que não há o que desenhar ──────────────────────────── */
+
+  function mostrarAviso(mensagem) {
+    const aviso = document.createElement('p');
+    aviso.className = 'grafo-aviso';
+    aviso.textContent = mensagem;
+    area.replaceChildren(aviso);
+  }
+
+  /* ── Dados → elementos do Cytoscape ──────────────────────────────────── */
+
+  /* Posição inicial: elipse com os tipos agrupados (a ordem do array é
+     personagens, eventos, locais). O "cose" parte daqui. */
+  function posicaoInicial(i, total) {
+    const angulo = -Math.PI / 2 + i * (2 * Math.PI / total);
+    return { x: 400 * Math.cos(angulo), y: 260 * Math.sin(angulo) };
   }
 
   /* Quebra um nome em linhas de até `limite` caracteres, sem cortar palavras:
@@ -73,198 +70,208 @@
     }, []);
   }
 
-  /* ── Nós ─────────────────────────────────────────────────────────────── */
+  /* Tamanho aproximado do texto: a forma do nó é calculada aqui para caber
+     o rótulo, já que a biblioteca não mede o texto sozinha. */
+  const LARGURA_DO_CARACTERE = 7;
+  const ALTURA_DA_LINHA = 16;
 
-  /* Cada entidade vira um nó com forma, tamanho e textos já decididos.
-     meiaLargura e meiaAltura medem a forma a partir do centro: no
-     retângulo, metade dos lados; no círculo e na elipse, os raios. */
-  function montarNo(entidade) {
+  function montarNo(entidade, i, total) {
+    let linhas;
+    let corDaBorda;
     if (entidade.tipo === 'Personagem') {
-      const linhas = quebrarLinhas(entidade.nome, 18);
-      return {
-        entidade: entidade,
-        forma: 'rect',
-        linhas: linhas,
-        detalhe: Acervo.formatarPeriodo(entidade),
-        meiaLargura: 65,
-        meiaAltura: ((linhas.length + 1) * ALTURA_DA_LINHA + 14) / 2
-      };
+      linhas = quebrarLinhas(entidade.nome, 18).concat(Acervo.formatarPeriodo(entidade));
+      corDaBorda = COR_DA_DINASTIA[entidade.dinastia] || cor('--text-dim');
+    } else if (entidade.tipo === 'Evento') {
+      linhas = quebrarLinhas(entidade.nome, 12).concat(entidade.data.slice(0, 4));
+      corDaBorda = cor('--evento');
+    } else {
+      linhas = quebrarLinhas(entidade.nome, 14).concat(entidade.tipoLocal);
+      corDaBorda = cor('--local');
     }
+
+    const maisLonga = Math.max.apply(null, linhas.map(function (l) { return l.length; }));
+    let largura = maisLonga * LARGURA_DO_CARACTERE + 24;
+    let altura = linhas.length * ALTURA_DA_LINHA + 14;
     if (entidade.tipo === 'Evento') {
-      return {
-        entidade: entidade,
-        forma: 'circle',
-        linhas: quebrarLinhas(entidade.nome, 12),
-        detalhe: entidade.data.slice(0, 4),
-        meiaLargura: 46,
-        meiaAltura: 46
-      };
+      largura = altura = Math.max(largura, altura) + 10;   // círculo: diâmetro único
+    } else if (entidade.tipo === 'Local') {
+      largura += 20;                                       // a elipse perde espaço nas pontas
     }
+
     return {
-      entidade: entidade,
-      forma: 'ellipse',
-      linhas: quebrarLinhas(entidade.nome, 14),
-      detalhe: entidade.tipoLocal,
-      meiaLargura: 64,
-      meiaAltura: 26
+      group: 'nodes',
+      data: {
+        id: entidade.id,
+        rotulo: linhas.join('\n'),
+        cor: corDaBorda,
+        tipo: entidade.tipo,
+        largura: largura,
+        altura: altura
+      },
+      position: posicaoInicial(i, total)
     };
   }
 
-  /* Distribui os nós na elipse em ângulos iguais, começando no topo (-90°)
-     e seguindo no sentido horário. A ordem do array — personagens, eventos,
-     locais — mantém os tipos agrupados. */
-  function posicionar(nos) {
-    const passo = (2 * Math.PI) / nos.length;
-    nos.forEach(function (no, i) {
-      const angulo = -Math.PI / 2 + i * passo;
-      no.x = LARGURA / 2 + RAIO_X * Math.cos(angulo);
-      no.y = ALTURA / 2 + RAIO_Y * Math.sin(angulo);
-    });
-  }
+  function montarElementos(acervo) {
+    const entidades = Acervo.todasAsEntidades(acervo);
+    const existe = {};
+    entidades.forEach(function (e) { existe[e.id] = true; });
 
-  function criarForma(no) {
-    const atributos = { 'class': 'no no-' + no.entidade.tipo.toLowerCase() };
-    if (no.entidade.tipo === 'Personagem') atributos['data-dinastia'] = no.entidade.dinastia;
-
-    if (no.forma === 'rect') {
-      atributos.x = arredondar(no.x - no.meiaLargura);
-      atributos.y = arredondar(no.y - no.meiaAltura);
-      atributos.width = no.meiaLargura * 2;
-      atributos.height = no.meiaAltura * 2;
-      atributos.rx = 3;
-    } else if (no.forma === 'circle') {
-      atributos.cx = arredondar(no.x);
-      atributos.cy = arredondar(no.y);
-      atributos.r = no.meiaLargura;
-    } else {
-      atributos.cx = arredondar(no.x);
-      atributos.cy = arredondar(no.y);
-      atributos.rx = no.meiaLargura;
-      atributos.ry = no.meiaAltura;
-    }
-    return criarSvg(no.forma, atributos);
-  }
-
-  /* Nome (uma ou mais linhas) e detalhe, centralizados verticalmente no nó. */
-  function criarTextos(no) {
-    const total = no.linhas.length + (no.detalhe ? 1 : 0);
-    const primeiraLinha = no.y - ((total - 1) * ALTURA_DA_LINHA) / 2 + 4;
-
-    const textos = no.linhas.map(function (linha, i) {
-      return criarSvg('text', {
-        'class': 'nome',
-        x: arredondar(no.x),
-        y: arredondar(primeiraLinha + i * ALTURA_DA_LINHA)
-      }, linha);
-    });
-    if (no.detalhe) {
-      textos.push(criarSvg('text', {
-        'class': 'miudo',
-        x: arredondar(no.x),
-        y: arredondar(primeiraLinha + no.linhas.length * ALTURA_DA_LINHA)
-      }, no.detalhe));
-    }
-    return textos;
-  }
-
-  function desenharNos(nos) {
-    nos.forEach(function (no) {
-      const grupo = criarSvg('g');
-      grupo.append.apply(grupo, [criarForma(no)].concat(criarTextos(no)));
-      camadaNos.appendChild(grupo);
-    });
-  }
-
-  /* ── Arestas ─────────────────────────────────────────────────────────── */
-
-  /* Ponto da borda do nó na direção (dx, dy), um vetor de tamanho 1. Sem
-     isto, a linha iria até o centro e a ponta da seta ficaria escondida
-     atrás do nó. */
-  function bordaNaDirecao(no, dx, dy) {
-    const a = no.meiaLargura;
-    const b = no.meiaAltura;
-    const distancia = no.forma === 'rect'
-      ? Math.min(a / Math.abs(dx), b / Math.abs(dy))
-      : 1 / Math.sqrt((dx / a) * (dx / a) + (dy / b) * (dy / b));
-    return { x: no.x + dx * distancia, y: no.y + dy * distancia };
-  }
-
-  /* Devolve as relações efetivamente desenhadas. */
-  function desenharArestas(relacoes, porId) {
     /* Situação inválida tratada: uma relação que aponta para uma entidade
        inexistente (dado antigo ou editado à mão) é ignorada, em vez de
        interromper o desenho inteiro. */
-    const validas = relacoes.filter(function (r) {
-      return porId[r.origem] && porId[r.destino] && r.origem !== r.destino;
+    const relacoes = acervo.relacoes.filter(function (r) {
+      return existe[r.origem] && existe[r.destino];
     });
-    if (validas.length < relacoes.length) {
-      console.warn('[grafo] ' + (relacoes.length - validas.length) + ' relação(ões) apontam para entidades inexistentes e foram ignoradas.');
+    if (relacoes.length < acervo.relacoes.length) {
+      console.warn('[grafo] ' + (acervo.relacoes.length - relacoes.length) +
+                   ' relação(ões) apontam para entidades inexistentes e foram ignoradas.');
     }
 
-    validas.forEach(function (relacao) {
-      const origem = porId[relacao.origem];
-      const destino = porId[relacao.destino];
-
-      const comprimento = Math.hypot(destino.x - origem.x, destino.y - origem.y);
-      const dx = (destino.x - origem.x) / comprimento;
-      const dy = (destino.y - origem.y) / comprimento;
-
-      const inicio = bordaNaDirecao(origem, dx, dy);
-      const chegada = bordaNaDirecao(destino, -dx, -dy);
-      const fim = { x: chegada.x - dx * FOLGA_SETA, y: chegada.y - dy * FOLGA_SETA };
-
-      /* marker-end vai como atributo, e não no CSS: em folha de estilo
-         externa, url(#seta) seria procurado dentro do arquivo .css. */
-      camadaArestas.append(
-        criarSvg('line', {
-          'class': 'aresta',
-          x1: arredondar(inicio.x), y1: arredondar(inicio.y),
-          x2: arredondar(fim.x),    y2: arredondar(fim.y),
-          'marker-end': 'url(#seta)'
-        }),
-        criarSvg('text', {
-          'class': 'rotulo',
-          x: arredondar(inicio.x + (fim.x - inicio.x) * POSICAO_DO_ROTULO),
-          y: arredondar(inicio.y + (fim.y - inicio.y) * POSICAO_DO_ROTULO - 3)
-        }, relacao.tipo)
-      );
+    const nos = entidades.map(function (entidade, i) {
+      return montarNo(entidade, i, entidades.length);
     });
-    return validas;
+    const arestas = relacoes.map(function (r, i) {
+      return { group: 'edges', data: { id: 'R' + i, source: r.origem, target: r.destino, tipo: r.tipo } };
+    });
+    return { nos: nos, arestas: arestas, relacoes: relacoes };
   }
 
-  /* ── Descrição em texto ──────────────────────────────────────────────── */
+  /* ── Aparência ───────────────────────────────────────────────────────── */
 
-  /* O <desc> é o que o leitor de tela lê no lugar do desenho: passa a
-     descrever a rede real, relação por relação. */
-  function descrever(nos, relacoes, porId) {
-    const frases = relacoes.map(function (r) {
-      return porId[r.origem].entidade.nome + ' ' + r.tipo + ' ' + porId[r.destino].entidade.nome;
-    });
-    descricao.textContent =
-      Acervo.plural(nos.length, 'entidade', 'entidades') + ' e ' +
-      Acervo.plural(relacoes.length, 'relação', 'relações') + '. ' +
-      frases.join('; ') + '.';
+  function estilos() {
+    return [
+      {
+        selector: 'node',
+        style: {
+          'label': 'data(rotulo)',
+          'text-wrap': 'wrap',
+          'text-valign': 'center',
+          'text-halign': 'center',
+          'font-family': 'Inter, sans-serif',
+          'font-size': '13px',
+          'line-height': 1.2,
+          'color': cor('--text'),
+          'background-color': cor('--surface'),
+          'border-width': 1.6,
+          'border-color': 'data(cor)',
+          'width': 'data(largura)',
+          'height': 'data(altura)'
+        }
+      },
+      { selector: 'node[tipo = "Personagem"]', style: { 'shape': 'round-rectangle' } },
+      { selector: 'node[tipo = "Evento"], node[tipo = "Local"]', style: { 'shape': 'ellipse' } },
+      {
+        selector: 'edge',
+        style: {
+          'width': 1.4,
+          'line-color': cor('--text-dim'),
+          'target-arrow-color': cor('--text-dim'),
+          'target-arrow-shape': 'triangle',
+          'curve-style': 'bezier',
+          'label': 'data(tipo)',
+          'font-family': 'Consolas, monospace',
+          'font-size': '10px',
+          'color': cor('--gold-dim'),
+          'text-rotation': 'autorotate',
+          'text-background-color': cor('--surface'),
+          'text-background-opacity': 1,
+          'text-background-padding': '2px'
+        }
+      },
+      /* Destaque ao clicar: o nó escolhido e os vizinhos ficam acesos,
+         o resto do grafo apaga. */
+      { selector: '.apagado', style: { 'opacity': 0.12 } },
+      { selector: 'node.escolhido', style: { 'border-width': 3 } },
+      { selector: 'edge.aceso', style: { 'line-color': cor('--gold'), 'target-arrow-color': cor('--gold'), 'color': cor('--gold'), 'width': 2 } }
+    ];
+  }
+
+  /* ── Interação ───────────────────────────────────────────────────────── */
+
+  function destacarVizinhanca(cy, no) {
+    limparDestaque(cy);
+    cy.elements().addClass('apagado');
+    no.closedNeighborhood().removeClass('apagado');
+    no.connectedEdges().addClass('aceso');
+    no.addClass('escolhido');
+  }
+
+  function limparDestaque(cy) {
+    cy.elements().removeClass('apagado aceso escolhido');
+  }
+
+  /* ── Alternativa em texto ────────────────────────────────────────────── */
+
+  /* O <canvas> é só uma imagem para o leitor de tela. A mesma rede, em
+     forma de lista, fica no <details> abaixo do desenho. */
+  function listarEmTexto(acervo, relacoes) {
+    const nomes = {};
+    Acervo.todasAsEntidades(acervo).forEach(function (e) { nomes[e.id] = e.nome; });
+    lista.replaceChildren.apply(lista, relacoes.map(function (r) {
+      const tipo = document.createElement('span');
+      tipo.className = 'tipo-relacao';
+      tipo.textContent = r.tipo;
+      const item = document.createElement('li');
+      item.append(nomes[r.origem], tipo, '→ ' + nomes[r.destino]);
+      return item;
+    }));
   }
 
   /* ── Montagem ────────────────────────────────────────────────────────── */
 
   const acervo = Acervo.carregar();
-  const nos = Acervo.todasAsEntidades(acervo).map(montarNo);
+  const elementos = montarElementos(acervo);
+  listarEmTexto(acervo, elementos.relacoes);
 
-  /* Situação inválida tratada: acervo vazio (tudo removido no painel). */
-  if (nos.length === 0) {
-    camadaNos.appendChild(criarSvg('text', {
-      'class': 'nome', x: LARGURA / 2, y: ALTURA / 2
-    }, 'O acervo está vazio. Restaure o acervo de exemplo no Painel do Curador.'));
-    descricao.textContent = 'O acervo está vazio.';
+  /* Situação inválida tratada: a biblioteca não carregou (arquivo da pasta
+     vendor/ ausente ou bloqueado). A lista em texto continua disponível. */
+  if (typeof cytoscape !== 'function') {
+    mostrarAviso('Não foi possível carregar a biblioteca de desenho do grafo. As relações continuam listadas abaixo.');
     return;
   }
 
-  const porId = {};
-  nos.forEach(function (no) { porId[no.entidade.id] = no; });
+  /* Situação inválida tratada: acervo vazio (tudo removido no painel). */
+  if (elementos.nos.length === 0) {
+    mostrarAviso('O acervo está vazio. Restaure o acervo de exemplo no Painel do Curador.');
+    return;
+  }
 
-  posicionar(nos);
-  const desenhadas = desenharArestas(acervo.relacoes, porId);
-  desenharNos(nos);
-  descrever(nos, desenhadas, porId);
+  const cy = cytoscape({
+    container: area,
+    elements: elementos.nos.concat(elementos.arestas),
+    style: estilos(),
+    layout: { name: 'preset' },   // começa nas posições da elipse
+    minZoom: 0.3,
+    maxZoom: 2.5,
+    boxSelectionEnabled: false
+  });
+
+  cy.layout({
+    name: 'cose',
+    randomize: false,      // parte da elipse: o resultado não muda entre recargas
+    animate: false,
+    fit: false,
+    nodeRepulsion: 12000,
+    idealEdgeLength: 110,
+    nodeOverlap: 20,
+    gravity: 0.3,
+    numIter: 2000
+  }).run();
+
+  /* A área de desenho é larga. Se as forças deixaram o grafo mais alto que
+     largo, gira as posições em 90° (troca x por y) para aproveitar a
+     largura; senão, o enquadramento reduziria o zoom e os textos sumiriam. */
+  const caixa = cy.nodes().boundingBox();
+  if (caixa.h > caixa.w) {
+    cy.nodes().positions(function (no) {
+      return { x: no.position('y'), y: -no.position('x') };
+    });
+  }
+  cy.fit(undefined, 24);
+
+  cy.on('tap', 'node', function (evento) { destacarVizinhanca(cy, evento.target); });
+  cy.on('tap', function (evento) {
+    if (evento.target === cy) limparDestaque(cy);   // clique no fundo desfaz o destaque
+  });
 })();

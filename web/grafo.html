@@ -39,24 +39,11 @@
         <h3 id="titulo-rede" hidden>Rede de entidades</h3>
 
         <figure>
-          <div class="rolagem-figura">
-          <svg viewBox="0 0 900 600" role="img" aria-labelledby="svg-titulo svg-desc">
-            <title id="svg-titulo">Rede de conexões do acervo</title>
-            <desc id="svg-desc">Rede de entidades e relações do acervo.</desc>
-
-            <defs>
-              <marker id="seta" viewBox="0 0 10 10" refX="9" refY="5"
-                      markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-                <path class="seta-ponta" d="M 0 0 L 10 5 L 0 10 z"/>
-              </marker>
-            </defs>
-
-            <!-- Preenchidos por assets/js/grafo.js a partir dos dados do acervo.
-                 As arestas vêm antes para que os nós sejam desenhados por cima. -->
-            <g id="grafo-arestas"></g>
-            <g id="grafo-nos"></g>
-          </svg>
-          </div>
+          <!-- Preenchido por assets/js/grafo.js com a biblioteca Cytoscape.js,
+               que desenha em <canvas>. A mesma rede, em texto, está no
+               <details> abaixo. -->
+          <div class="grafo" id="grafo" role="img"
+               aria-label="Rede de conexões do acervo. A lista das relações em texto vem logo abaixo do desenho."></div>
 
           <noscript>
             <p class="status status-aviso">
@@ -74,11 +61,17 @@
             <li><span class="amostra amostra-local"></span> Local</li>
           </ul>
 
+          <details class="grafo-texto">
+            <summary>Ver as relações em lista</summary>
+            <ul class="conexoes" id="grafo-lista"></ul>
+          </details>
+
           <figcaption>
             O acervo inteiro, desenhado a partir dos mesmos dados da listagem e do painel.
             Personagens são retângulos coloridos pela dinastia, eventos são círculos e locais
-            são elipses, distribuídos numa elipse e agrupados por tipo. As setas indicam a
-            direção da relação e o rótulo indica o seu tipo.
+            são elipses; as setas indicam a direção da relação e o rótulo indica o seu tipo.
+            <strong>Clique num nó</strong> para destacar as conexões dele, arraste para
+            mover e use a roda do mouse (ou o gesto de pinça) para aproximar.
           </figcaption>
         </figure>
       </section>
@@ -140,6 +133,7 @@
     </div>
   </footer>
 
+  <script src="assets/js/vendor/cytoscape.min.js"></script>
   <script src="assets/js/acervo.js"></script>
   <script src="assets/js/grafo.js"></script>
 
